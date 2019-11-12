@@ -1,0 +1,41 @@
+package com.http.las.minsides.controller.commands;
+
+import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.MInsidesBot;
+import com.http.las.minsides.controller.storage.UserSessionInfo;
+import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.server.notes.service.NotesService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
+
+@Component
+@AllArgsConstructor
+public class AddFilters implements Command {
+    private NotesService service;
+    private MInsidesBot source;
+
+    @Override
+    public void execute(Update update) throws TelegramApiException {
+        Long chatId = ChatUtil.getChatId(update);
+        List<NoteType> noteTypes = service.getUserNoteTypes(chatId);
+
+        int i = 1;
+        StringBuilder builder = new StringBuilder();
+        for (NoteType type : noteTypes) {
+            builder.append('/')
+                    .append(i++)
+                    .append(" ")
+                    .append(type.getTypeName())
+                    .append("\n");
+        }
+        ChatUtil.sendMsg("Choose type(s)", update, source);
+        ChatUtil.sendMsg(builder.toString(), update, source);
+        UserSessionInfo.USER_NOTE_TYPES.remove(chatId);
+        UserSessionInfo.USER_NOTE_TYPES.put(chatId, noteTypes);
+    }
+}
