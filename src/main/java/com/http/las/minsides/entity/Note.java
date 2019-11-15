@@ -27,7 +27,7 @@ public class Note implements DaoEntity {
     private Timestamp date;
     @Column(name = "chat_id")
     private Long chatId;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable(
             name = "notes_types",
             joinColumns = {@JoinColumn(name = "note_id", referencedColumnName = "nid")},

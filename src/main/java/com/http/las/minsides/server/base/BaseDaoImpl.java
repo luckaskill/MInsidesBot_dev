@@ -7,10 +7,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "JpaQlInspection"})
 public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
     private String genericClassName;
 
@@ -40,7 +41,7 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
     }
 
     @Override
-    public void save(T... values) {
+    public void save(Collection<T> values) {
         @Cleanup
         Session session = HibSessionFactory.open();
         Transaction transaction = session.beginTransaction();
@@ -51,7 +52,49 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
     }
 
     @Override
-    public void persist(T... values) {
+    public void remove(Collection<T> values) {
+        @Cleanup
+        Session session = HibSessionFactory.open();
+        Transaction transaction = session.beginTransaction();
+        for (T t : values) {
+            remove(session, t);
+        }
+        transaction.commit();
+    }
+
+    @Override
+    public void remove(T obj) {
+        @Cleanup
+        Session session = HibSessionFactory.open();
+        Transaction transaction = session.beginTransaction();
+        remove(session, obj);
+        transaction.commit();
+    }
+
+    private void remove(Session session, T obj) {
+        session.remove(obj);
+    }
+
+    @Override
+    public void remove(Integer id) {
+        @Cleanup
+        Session session = HibSessionFactory.open();
+        remove(session, id);
+    }
+
+    @Override
+    public void delete(T obj) {
+        @Cleanup
+        Session session = HibSessionFactory.open();
+        session.delete(obj);
+    }
+
+    private void remove(Session session, Integer id) {
+        session.createQuery("DELETE FROM " + genericClassName + " WHERE nid=" + id).executeUpdate();
+    }
+
+    @Override
+    public void persist(Collection<T> values) {
         @Cleanup
         Session session = HibSessionFactory.open();
         Transaction transaction = session.beginTransaction();
@@ -69,7 +112,6 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
         return list;
     }
 
-    @SuppressWarnings("JpaQlInspection")
     @Override
     public List<T> select(Set<Integer> ids) {
         @Cleanup
@@ -79,7 +121,7 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
             inCondition.append(id).append(", ");
         }
         inCondition.delete(inCondition.length() - 3, inCondition.length() - 1);
-        List<T> list = session.createQuery("FROM " + genericClassName + " WHERE nid in(" + inCondition.toString() + ")").list();
+        List<T> list = session.createQuery("FROM " + genericClassName + " WHERE nid IN(" + inCondition.toString() + ")").list();
         return list;
     }
 
