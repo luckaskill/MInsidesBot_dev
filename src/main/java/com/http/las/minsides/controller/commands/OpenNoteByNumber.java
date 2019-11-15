@@ -2,8 +2,8 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.storage.UserSessionInfo;
 import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.entity.Note;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,7 +30,7 @@ public class OpenNoteByNumber implements Command {
         try {
             if (numberStr != null && numberStr.charAt(0) == '/') {
                 int number = Integer.parseInt(numberStr.substring(1));
-                List<Note> notes = UserSessionInfo.USER_NOTES.get(chatId);
+                List<Note> notes = SessionUtil.getUserNotes(update);
                 if (notes != null) {
                     Note result = notes.get(number - 1);
                     sendMsg(result.toString(), chatId, source);

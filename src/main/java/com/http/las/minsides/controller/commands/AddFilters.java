@@ -2,8 +2,8 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.storage.UserSessionInfo;
 import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.entity.NoteType;
 import com.http.las.minsides.server.notes.service.NotesService;
 import lombok.AllArgsConstructor;
@@ -35,7 +35,6 @@ public class AddFilters implements Command {
         }
         ChatUtil.sendMsg("Choose type(s)", update, source);
         ChatUtil.sendMsg(builder.toString(), update, source);
-        UserSessionInfo.USER_NOTE_TYPES.remove(chatId);
-        UserSessionInfo.USER_NOTE_TYPES.put(chatId, noteTypes);
+        SessionUtil.setUserNotesTypes(update, noteTypes);
     }
 }

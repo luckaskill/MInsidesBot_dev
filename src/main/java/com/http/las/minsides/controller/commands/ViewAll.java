@@ -2,12 +2,11 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.TaskManager;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
 import com.http.las.minsides.controller.entity.Messages;
-import com.http.las.minsides.controller.storage.UserSessionInfo;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.entity.Note;
 import com.http.las.minsides.server.notes.service.NotesService;
 import lombok.AllArgsConstructor;
@@ -41,21 +40,25 @@ public class ViewAll implements Command {
                     .append('\n')
                     .append(note.toShortString());
         }
-        ChatUtil.sendMsg(builder.toString(), update, source);
-        ChatUtil.sendMsg("Print note number to open it.", update, source);
-        UserSessionInfo.USER_NOTES.remove(chatId);
-        UserSessionInfo.USER_NOTES.put(chatId, allNotes);
-        TaskManager.addToQueue(noteByNumber);
 
+        if (builder.length() == 0) {
+            ChatUtil.sendMsg(Messages.NOTHING_TO_SHOW, update, source);
+        } else {
+            ChatUtil.sendMsg(builder.toString(), update, source);
+            ChatUtil.sendMsg(Messages.PRINT_NOTE_NUMBER, update, source);
+            SessionUtil.setUserNotes(update, allNotes);
+            SessionUtil.setNextCommand(update, noteByNumber);
 
-        List<ButtonKeyboardData> keyboardData = Collections.singletonList(
-                new ButtonKeyboardData(ADD_FILTERS, Messages.ADD_FILTERS, false));
+            List<ButtonKeyboardData> keyboardData = Collections.singletonList(
+                    new ButtonKeyboardData(ADD_FILTERS, Messages.ADD_FILTERS, false));
 
-        InlineKeyboardMarkup markup = ButtonUtil.configureKeyboard(keyboardData);
-        SendMessage sendMsg = new SendMessage()
-                .setText("Filters?")
-                .setChatId(chatId)
-                .setReplyMarkup(markup);
-        source.execute(sendMsg);
+            InlineKeyboardMarkup markup = ButtonUtil.configureKeyboard(keyboardData);
+            SendMessage sendMsg = new SendMessage()
+                    .setText("Filters?")
+                    .setChatId(chatId)
+                    .setReplyMarkup(markup);
+            source.execute(sendMsg);
+
+        }
     }
 }

@@ -14,4 +14,6 @@ public interface Messages {
     String ERROR_MESSAGE = "Here is a problem... please contact me. \n @luckaskill";
     String WRONG_INPUT = "Wrong input, bro";
     String ADD_FILTERS = "Add filters";
+    String NOTHING_TO_SHOW = "Here is nothing for now..";
+    String PRINT_NOTE_NUMBER = "Print note number to open it.";
 }

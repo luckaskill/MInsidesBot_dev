@@ -2,10 +2,10 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.TaskManager;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -26,7 +26,7 @@ public class Start implements Command {
 
     @Override
     public void execute(Update update) throws TelegramApiException {
-        TaskManager.clearQueue();
+        SessionUtil.clearNextCommand(update);
         List<ButtonKeyboardData> dataList =
                 Arrays.asList(
                         new ButtonKeyboardData(VIEW_ALL_COMMAND, "View all notes", true),

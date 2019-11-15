@@ -2,11 +2,10 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.TaskManager;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
-import com.http.las.minsides.controller.storage.UserSessionInfo;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.entity.Note;
 import com.http.las.minsides.entity.NoteType;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.List;
 
 import static com.http.las.minsides.controller.entity.CommandNames.ADD_TYPE_TO_NOTE_COMMAND;
 import static com.http.las.minsides.controller.entity.CommandNames.SHOW_ADD_NOTE_PANEL_COMMAND;
-import static com.http.las.minsides.controller.tools.StockUtil.getOrPutInCreationNote;
+import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCreationNote;
 
 @Component
 @AllArgsConstructor
@@ -31,25 +30,25 @@ public class AddTypesToNote implements Command {
 
     @Override
     public void execute(Update update) throws TelegramApiException {
-        String typeName = ChatUtil.getMessage(update);
+        String typeName = ChatUtil.getMessageText(update);
         Long chatId = ChatUtil.getChatId(update);
         if (typeName == null) {
-            TaskManager.addToQueue(this);
+            SessionUtil.setNextCommand(update, this);
             ChatUtil.sendMsg("Not like this... try again", chatId, source);
             return;
         }
         try {
             int number = Integer.parseInt(typeName);
-            List<NoteType> noteTypes = UserSessionInfo.USER_NOTE_TYPES.get(chatId);
+            List<NoteType> noteTypes = SessionUtil.getUserNoteTypes(update);
             if (noteTypes != null && noteTypes.size() > number) {
-                Note note = getOrPutInCreationNote(chatId);
+                Note note = getOrPutInCreationNote(update);
                 NoteType type = noteTypes.get(number);
                 List<NoteType> types = note.getNoteTypes();
                 types.add(type);
                 ChatUtil.sendMsg("Nice, now u can continue your creation", chatId, source);
                 showAddNotePanel.execute(update);
             } else {
-                TaskManager.addToQueue(this);
+                SessionUtil.setNextCommand(update, this);
                 ChatUtil.sendMsg("Not like this... try again", chatId, source);
             }
         } catch (NumberFormatException e) {
@@ -57,7 +56,7 @@ public class AddTypesToNote implements Command {
                     new ButtonKeyboardData(ADD_TYPE_TO_NOTE_COMMAND, "Yes", false),
                     new ButtonKeyboardData(SHOW_ADD_NOTE_PANEL_COMMAND, "No", false)
             );
-            UserSessionInfo.TYPES_TO_SAVE.put(chatId, new NoteType().setTypeName(typeName));
+            SessionUtil.setUserTypeToSave(update, new NoteType().setTypeName(typeName));
             InlineKeyboardMarkup markup = ButtonUtil.configureKeyboard(data);
             SendMessage sendMsg = new SendMessage()
                     .setText("You sure you want to save new type with name " + typeName + " ?")

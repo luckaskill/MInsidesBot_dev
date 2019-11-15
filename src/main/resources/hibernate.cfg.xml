@@ -4,9 +4,9 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:mysql://localhost:3306/mishas_notes</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/mishas_notes?serverTimezone=Europe/Moscow&amp;useSSL=false</property>
         <property name="connection.username">root</property>
-        <property name="connection.password">rootadmin</property>
+        <property name="connection.password">258226</property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="show_sql">true</property>

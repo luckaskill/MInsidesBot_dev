@@ -3,7 +3,7 @@ package com.http.las.minsides.controller.commands;
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import com.http.las.minsides.controller.tools.StockUtil;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.entity.Note;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,9 +19,9 @@ public class AddNoteContent implements Command {
     @Override
     public void execute(Update update) throws TelegramApiException {
         Long chatId = ChatUtil.getChatId(update);
-        Note note = StockUtil.getCurrentEditedNote(chatId);
+        Note note = SessionUtil.getCurrentEditedNote(update);
 
-        String textMsg = ChatUtil.getMessage(update);
+        String textMsg = ChatUtil.getMessageText(update);
         note.setNote(textMsg);
 
         ChatUtil.sendMsg("Nice, now u can continue your creation", chatId, source);

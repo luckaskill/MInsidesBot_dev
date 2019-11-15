@@ -1,10 +1,8 @@
 package com.http.las.minsides.controller;
 
 import com.http.las.minsides.controller.commands.*;
-import com.http.las.minsides.controller.entity.Messages;
-import com.http.las.minsides.controller.exception.UserFriendlyException;
-import com.http.las.minsides.controller.storage.UserSessionInfo;
 import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.entity.Note;
 import com.http.las.minsides.entity.NoteType;
 import com.http.las.minsides.server.notes.service.NotesService;
@@ -13,18 +11,18 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.http.las.minsides.controller.entity.CommandNames.*;
-import static com.http.las.minsides.controller.tools.StockUtil.getOrPutInCreationNote;
+import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCreationNote;
 
 @Component
 public class TaskManager {
     private final Map<String, Command> TASK_IMPLS = new HashMap<>();
-    private static final Deque<Command> HANDLERS_QUEUE = new LinkedList<>();
     @Autowired
     private MInsidesBot source;
-
     @Autowired
     private NotesService service;
 
@@ -38,11 +36,11 @@ public class TaskManager {
         TASK_IMPLS.put(SHOW_ADD_NOTE_PANEL_COMMAND, showAddNotePanel);
         TASK_IMPLS.put(ADD_NOTE_CONTENT_COMMAND, (update) -> {
             ChatUtil.sendMsg("Print something from ur mind:", update, source);
-            HANDLERS_QUEUE.addLast(addNoteContent);
+            SessionUtil.setNextCommand(update, addNoteContent);
         });
         TASK_IMPLS.put(ADD_TITLE_COMMAND, (update) -> {
             ChatUtil.sendMsg("Print title ", update, source);
-            HANDLERS_QUEUE.addLast(addTitle);
+            SessionUtil.setNextCommand(update, addTitle);
         });
         TASK_IMPLS.put(SAVE_NOTE_COMMAND, saveNote);
         TASK_IMPLS.put(VIEW_ALL_COMMAND, viewAll);
@@ -58,15 +56,14 @@ public class TaskManager {
                 }
             }
             ChatUtil.sendMsg(builder.toString(), update, source);
-            UserSessionInfo.USER_NOTE_TYPES.remove(chatId);
-            UserSessionInfo.USER_NOTE_TYPES.put(chatId, types);
-            HANDLERS_QUEUE.addLast(addTypesToNote);
+            SessionUtil.setUserNotesTypes(update, types);
+            SessionUtil.setNextCommand(update, addTypesToNote);
         });
         TASK_IMPLS.put(SAVE_NEW_TYPE, saveNewType);
         TASK_IMPLS.put(ADD_TYPE_TO_NOTE_COMMAND, (update) -> {
             Long chatId = ChatUtil.getChatId(update);
-            NoteType type = UserSessionInfo.TYPES_TO_SAVE.get(chatId);
-            Note note = getOrPutInCreationNote(chatId);
+            NoteType type = SessionUtil.getNoteTypeToSave(update);
+            Note note = getOrPutInCreationNote(update);
             List<NoteType> noteTypes = note.getNoteTypes();
             noteTypes.add(type);
             ChatUtil.sendMsg("Nice, now u can continue your creation", chatId, source);
@@ -74,52 +71,19 @@ public class TaskManager {
         });
     }
 
-    void impl(String input, Update update) {
+    void impl(String input, Update update) throws TelegramApiException {
         Command command = TASK_IMPLS.get(input);
         command = command == null
-                ? (HANDLERS_QUEUE.size() > 0 ? takeCommandFromQueue() : null)
+                ? SessionUtil.getNextCommand(update)
                 : command;
+
+        if (SessionUtil.hasNextCommand(update)) {
+            SessionUtil.clearNextCommand(update);
+        }
+
         if (command != null) {
-            impl(command, update);
-        } else {
-            ChatUtil.shitHappened();
-        }
-    }
-
-    private Command takeCommandFromQueue() {
-        Command command = HANDLERS_QUEUE.getLast();
-        HANDLERS_QUEUE.removeLast();
-        return command;
-    }
-
-    public static void clearQueue() {
-        HANDLERS_QUEUE.clear();
-    }
-
-    public static void addToQueue(Command command) {
-        HANDLERS_QUEUE.addLast(command);
-    }
-
-    public static void removeFromQueue(Command command) {
-        HANDLERS_QUEUE.remove(command);
-    }
-
-    private void impl(Command command, Update update) {
-        try {
             command.execute(update);
-        } catch (UserFriendlyException e) {
-            try {
-                ChatUtil.sendMsg(e.getMessage(), update, source);
-            } catch (TelegramApiException ex) {
-                ex.printStackTrace();
-            }
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            try {
-                ChatUtil.sendMsg(Messages.ERROR_MESSAGE, update, source);
-            } catch (TelegramApiException ex) {
-                ex.printStackTrace();
-            }
         }
     }
+
 }

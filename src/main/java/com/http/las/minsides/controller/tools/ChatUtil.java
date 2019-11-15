@@ -32,7 +32,7 @@ public class ChatUtil {
         return id;
     }
 
-    public static String getMessage(Update update) {
+    public static String getMessageText(Update update) {
         Message message = update.getMessage();
         String text = update.hasMessage()
                 ? (message.hasText() ? message.getText() : null)
