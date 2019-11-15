@@ -34,9 +34,10 @@ public class ChatUtil {
 
     public static String getMessage(Update update) {
         Message message = update.getMessage();
-        return update.hasMessage()
+        String text = update.hasMessage()
                 ? (message.hasText() ? message.getText() : null)
                 : null;
+        return text;
     }
 
     public static void wrongInput() {

@@ -1,6 +1,8 @@
 package com.http.las.minsides.controller;
 
 import com.http.las.minsides.controller.commands.*;
+import com.http.las.minsides.controller.entity.Messages;
+import com.http.las.minsides.controller.exception.UserFriendlyException;
 import com.http.las.minsides.controller.storage.UserSessionInfo;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.entity.Note;
@@ -72,13 +74,15 @@ public class TaskManager {
         });
     }
 
-    void impl(String input, Update update) throws TelegramApiException {
+    void impl(String input, Update update) {
         Command command = TASK_IMPLS.get(input);
         command = command == null
                 ? (HANDLERS_QUEUE.size() > 0 ? takeCommandFromQueue() : null)
                 : command;
         if (command != null) {
-            command.execute(update);
+            impl(command, update);
+        } else {
+            ChatUtil.shitHappened();
         }
     }
 
@@ -95,8 +99,27 @@ public class TaskManager {
     public static void addToQueue(Command command) {
         HANDLERS_QUEUE.addLast(command);
     }
+
     public static void removeFromQueue(Command command) {
         HANDLERS_QUEUE.remove(command);
     }
 
+    private void impl(Command command, Update update) {
+        try {
+            command.execute(update);
+        } catch (UserFriendlyException e) {
+            try {
+                ChatUtil.sendMsg(e.getMessage(), update, source);
+            } catch (TelegramApiException ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            try {
+                ChatUtil.sendMsg(Messages.ERROR_MESSAGE, update, source);
+            } catch (TelegramApiException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }

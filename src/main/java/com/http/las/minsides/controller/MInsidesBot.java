@@ -1,16 +1,11 @@
 package com.http.las.minsides.controller;
 
-import com.http.las.minsides.controller.entity.CommandNames;
 import com.http.las.minsides.controller.entity.Messages;
 import com.http.las.minsides.controller.exception.UserFriendlyException;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -48,36 +43,22 @@ public class MInsidesBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        String input = getCommand(update);
-        try {
-            if (input != null) {
-                taskManager.impl(input, update);
-            }
-        } catch (UserFriendlyException e) {
-            try {
-                ChatUtil.sendMsg(e.getMessage(), update, this);
-            } catch (TelegramApiException ex) {
-                ex.printStackTrace();
-            }
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            try {
-                ChatUtil.sendMsg(Messages.ERROR_MESSAGE, update, this);
-            } catch (TelegramApiException ex) {
-                ex.printStackTrace();
-            }
+        String input = getInput(update);
+        if (input != null) {
+            taskManager.impl(input, update);
         }
     }
 
-    private String getCommand(Update update) {
+    private String getInput(Update update) {
         Message message = update.getMessage();
         String input = message != null
                 ? (message.hasText() ? message.getText() : null)
                 : null;
 
-        return input == null
+        input = input == null
                 ? (update.hasCallbackQuery() ? update.getCallbackQuery().getData() : null)
                 : input;
+        return input;
     }
 
     @Override

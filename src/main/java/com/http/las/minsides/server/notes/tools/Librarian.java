@@ -16,7 +16,8 @@ public class Librarian {
                 int size1 = noteTypes1.size();
                 int size2 = noteTypes2.size();
 
-                return Integer.compare(size1, size2);
+                int compare = Integer.compare(size1, size2);
+                return compare;
             }
             return 0;
         };
