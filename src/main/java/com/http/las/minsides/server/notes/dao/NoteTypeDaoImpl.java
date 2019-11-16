@@ -5,5 +5,5 @@ import com.http.las.minsides.server.base.BaseDaoImpl;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class NoteTypeDaoImpl extends BaseDaoImpl<NoteType> implements NoteTypeDao {
+class NoteTypeDaoImpl extends BaseDaoImpl<NoteType> implements NoteTypeDao {
 }

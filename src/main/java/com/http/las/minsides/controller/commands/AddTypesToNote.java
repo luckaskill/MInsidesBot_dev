@@ -40,9 +40,9 @@ public class AddTypesToNote implements Command {
         try {
             int number = Integer.parseInt(typeName);
             List<NoteType> noteTypes = SessionUtil.getUserNoteTypes(update);
-            if (noteTypes != null && noteTypes.size() > number) {
+            if (noteTypes != null && noteTypes.size() >= number && number > 0) {
                 Note note = getOrPutInCreationNote(update);
-                NoteType type = noteTypes.get(number);
+                NoteType type = noteTypes.get(number - 1);
                 List<NoteType> types = note.getNoteTypes();
                 types.add(type);
                 ChatUtil.sendMsg("Nice, now u can continue your creation", chatId, source);

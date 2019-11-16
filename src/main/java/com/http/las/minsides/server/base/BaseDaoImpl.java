@@ -13,15 +13,19 @@ import java.util.Set;
 
 @SuppressWarnings({"unchecked", "JpaQlInspection"})
 public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
-    private String genericClassName;
+    private String entityName;
 
     public BaseDaoImpl() {
+        this.entityName = defineEntityName();
+    }
+
+    private String defineEntityName() {
         String simpleName = ((ParameterizedType) (getClass().getGenericSuperclass()))
                 .getActualTypeArguments()[0].toString();
         if (simpleName.contains(".")) {
             simpleName = simpleName.substring(simpleName.lastIndexOf(".") + 1);
         }
-        this.genericClassName = simpleName;
+        return simpleName;
     }
 
     @Override
@@ -35,8 +39,9 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
     public void persist(T value) {
         @Cleanup
         Session session = HibSessionFactory.open();
+
         Transaction transaction = session.beginTransaction();
-        session.persist(value);
+        session.saveOrUpdate(value);
         transaction.commit();
     }
 
@@ -90,7 +95,7 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
     }
 
     private void remove(Session session, Integer id) {
-        session.createQuery("DELETE FROM " + genericClassName + " WHERE nid=" + id).executeUpdate();
+        session.createQuery("DELETE FROM " + entityName + " WHERE nid=" + id).executeUpdate();
     }
 
     @Override
@@ -108,7 +113,7 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
     public List<T> selectAll() {
         @Cleanup
         Session session = HibSessionFactory.open();
-        List<T> list = session.createQuery("FROM " + genericClassName).list();
+        List<T> list = session.createQuery("FROM " + entityName).list();
         return list;
     }
 
@@ -121,18 +126,15 @@ public class BaseDaoImpl<T extends DaoEntity> implements BaseDao<T> {
             inCondition.append(id).append(", ");
         }
         inCondition.delete(inCondition.length() - 3, inCondition.length() - 1);
-        List<T> list = session.createQuery("FROM " + genericClassName + " WHERE nid IN(" + inCondition.toString() + ")").list();
+        List<T> list = session.createQuery("FROM " + entityName + " WHERE nid IN(" + inCondition.toString() + ")").list();
         return list;
     }
 
-    @SuppressWarnings("JpaQlInspection")
     @Override
     public T select(Integer id) {
         @Cleanup
         Session session = HibSessionFactory.open();
-        T result = (T) session.createQuery("FROM " + genericClassName + " WHERE nid = " + id).uniqueResult();
+        T result = (T) session.createQuery("FROM " + entityName + " WHERE nid = " + id).uniqueResult();
         return result;
     }
-
-
 }

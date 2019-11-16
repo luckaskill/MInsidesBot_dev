@@ -66,6 +66,14 @@ public class SessionUtil {
         return notes;
     }
 
+    public static Note setNewCreationNote(Update update) {
+        UserSessionInfo session = getSession(update);
+        Note note = new Note();
+        session.setNoteInCreation(note);
+        return note;
+    }
+
+
     public static Note getOrPutInCreationNote(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
 

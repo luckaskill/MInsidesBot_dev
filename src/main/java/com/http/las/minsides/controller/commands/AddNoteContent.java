@@ -22,7 +22,7 @@ public class AddNoteContent implements Command {
         Note note = SessionUtil.getCurrentEditedNote(update);
 
         String textMsg = ChatUtil.getMessageText(update);
-        note.setNote(textMsg);
+        note.setText(textMsg);
 
         ChatUtil.sendMsg("Nice, now u can continue your creation", chatId, source);
         showAddNotePanel.execute(update);

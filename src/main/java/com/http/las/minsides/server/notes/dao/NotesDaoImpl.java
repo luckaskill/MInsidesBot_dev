@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class NotesDaoImpl extends BaseDaoImpl<Note> implements NotesDao {
+class NotesDaoImpl extends BaseDaoImpl<Note> implements NotesDao {
 
     @Override
     public List<Note> getAllNotes(Long chatId) {

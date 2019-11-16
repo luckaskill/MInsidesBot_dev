@@ -29,7 +29,7 @@ public class NotesServiceImpl implements NotesService {
     }
 
     private void validateNote(Note note) {
-        if (note.getTitle() == null || note.getNote() == null) {
+        if (note.getTitle() == null || note.getText() == null) {
             throw new NoteValidatingFailed("Print at least title and main text ;)");
         }
     }

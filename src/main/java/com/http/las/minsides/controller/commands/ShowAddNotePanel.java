@@ -2,6 +2,7 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,8 @@ public class ShowAddNotePanel implements Command {
     @Override
     public void execute(Update update) throws TelegramApiException {
         InlineKeyboardMarkup markup = ButtonUtil.createAddNotePanel();
+
+        SessionUtil.setNewCreationNote(update);
 
         Long chatId = ChatUtil.getChatId(update);
         SendMessage sendMsg = new SendMessage()

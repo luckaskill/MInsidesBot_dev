@@ -22,12 +22,13 @@ public class Note implements DaoEntity {
     @Column(name = "nid")
     private long id;
 
-    private String note;
+    @Column(name = "note")
+    private String text;
     private String title;
     private Timestamp date;
     @Column(name = "chat_id")
     private Long chatId;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "notes_types",
             joinColumns = {@JoinColumn(name = "note_id", referencedColumnName = "nid")},
@@ -36,15 +37,15 @@ public class Note implements DaoEntity {
     @EqualsAndHashCode.Exclude
     private List<NoteType> noteTypes = new ArrayList<>();
 
-    public Note(String note, String title, Timestamp date, Long chatId) {
-        this.note = note;
+    public Note(String text, String title, Timestamp date, Long chatId) {
+        this.text = text;
         this.title = title;
         this.date = date;
         this.chatId = chatId;
     }
 
-    public Note setNote(String note) {
-        this.note = note;
+    public Note setText(String note) {
+        this.text = note;
         return this;
     }
 
@@ -76,7 +77,7 @@ public class Note implements DaoEntity {
         builder.append(title)
                 .append("\n")
                 .append("\n")
-                .append(note)
+                .append(text)
                 .append("\n")
                 .append(dateStr);
         if (!CollectionUtils.isEmpty(noteTypes)) {

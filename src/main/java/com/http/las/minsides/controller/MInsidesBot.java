@@ -70,4 +70,12 @@ public class MInsidesBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return "912798529:AAHpUJtCVVLdZBo3HWO8Y5jIci50JtXSGzs";
     }
+
+
+    private void initBackgroundProcessing() {
+//        new Thread(() -> {
+//            for()
+//        })
+
+    }
 }
