@@ -1,8 +1,8 @@
 package com.http.las.minsides.server.notes.service;
 
 import com.http.las.minsides.controller.exception.NoteValidatingFailed;
-import com.http.las.minsides.entity.Note;
-import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 //import com.http.las.minsides.server.CryptUtil;
 import com.http.las.minsides.server.notes.dao.NoteTypeDao;
 import com.http.las.minsides.server.notes.dao.NotesDao;
@@ -19,6 +19,7 @@ public class NotesServiceImpl implements NotesService {
     private NotesDao notesDao;
     private NoteTypeDao noteTypeDao;
 //    private CryptUtil cryptUtil;
+
     @Override
     public void saveNote(Note note) {
         validateNote(note);

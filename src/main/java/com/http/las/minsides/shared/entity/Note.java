@@ -1,5 +1,4 @@
-package com.http.las.minsides.entity;
-
+package com.http.las.minsides.shared.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

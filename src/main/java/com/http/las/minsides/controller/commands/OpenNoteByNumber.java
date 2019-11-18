@@ -4,7 +4,7 @@ import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
-import com.http.las.minsides.entity.Note;
+import com.http.las.minsides.shared.entity.Note;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;

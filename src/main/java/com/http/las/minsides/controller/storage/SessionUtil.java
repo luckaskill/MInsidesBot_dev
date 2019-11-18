@@ -2,8 +2,8 @@ package com.http.las.minsides.controller.storage;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import com.http.las.minsides.entity.Note;
-import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
@@ -77,12 +77,14 @@ public class SessionUtil {
     public static Note getOrPutInCreationNote(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
 
-        if (sessionInfo.getNoteInCreation() == null) {
-            sessionInfo.setNoteInCreation(new Note());
+        Note noteInCreation = sessionInfo.getNoteInCreation();
+        if (noteInCreation == null) {
+            Note newNote = new Note();
+            sessionInfo.setNoteInCreation(newNote);
+            noteInCreation = newNote;
         }
 
-        Note note = sessionInfo.getNoteInCreation();
-        return note;
+        return noteInCreation;
     }
 
     public static void removeFromCreation(Update update) {
@@ -95,16 +97,20 @@ public class SessionUtil {
         return note;
     }
 
-    private static void getOrPutUserSession(long chatId) {
+    private static UserSessionInfo getOrPutUserSession(long chatId) {
+        UserSessionInfo session;
         if (!SESSIONS.containsKey(chatId)) {
-            SESSIONS.put(chatId, new UserSessionInfo(chatId));
+            session = new UserSessionInfo(chatId);
+            SESSIONS.put(chatId, session);
+        } else {
+            session = SESSIONS.get(chatId);
         }
+        return session;
     }
 
     private static UserSessionInfo getSession(Update update) {
         long chatId = ChatUtil.getChatId(update);
-        getOrPutUserSession(chatId);
-        UserSessionInfo sessionInfo = SESSIONS.get(chatId);
+        UserSessionInfo sessionInfo = getOrPutUserSession(chatId);
         return sessionInfo;
     }
 }

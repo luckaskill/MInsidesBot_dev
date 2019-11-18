@@ -2,11 +2,12 @@ package com.http.las.minsides.controller;
 
 import com.http.las.minsides.controller.commands.*;
 import com.http.las.minsides.controller.entity.Messages;
+import com.http.las.minsides.controller.exception.UnknownErrorException;
 import com.http.las.minsides.controller.exception.UserFriendlyException;
-import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
-import com.http.las.minsides.entity.Note;
-import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.controller.tools.ChatUtil;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 import com.http.las.minsides.server.notes.service.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.http.las.minsides.controller.entity.CommandNames.*;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
 import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCreationNote;
 
 @Component
@@ -25,13 +26,11 @@ public class TaskManager {
     private final Map<String, Command> TASK_IMPLS = new HashMap<>();
     @Autowired
     private MInsidesBot source;
-    @Autowired
-    private NotesService service;
 
     public TaskManager(SayHiToShyGuy shyGuy, ShowAddNotePanel showAddNotePanel,
                        Start start, AddNoteContent addNoteContent,
-                       AddTitle addTitle, SaveNote saveNote,
-                       ViewAll viewAll, AddTypesToNote addTypesToNote, SaveNewType saveNewType) {
+                       AddTitle addTitle, SaveNote saveNote, ViewAll viewAll,
+                       SaveNewType saveNewType, OpenTypeChoicePanel openTypeChoicePanel) {
         TASK_IMPLS.put(START_COMMAND, start);
         TASK_IMPLS.put(MENU_COMMAND, start);
         TASK_IMPLS.put(SAY_HI_SHY_GUY_COMMAND, shyGuy);
@@ -46,21 +45,7 @@ public class TaskManager {
         });
         TASK_IMPLS.put(SAVE_NOTE_COMMAND, saveNote);
         TASK_IMPLS.put(VIEW_ALL_COMMAND, viewAll);
-        TASK_IMPLS.put(START_ADD_TYPE_TO_NOTE_COMMAND, (update) -> {
-            Long chatId = ChatUtil.getChatId(update);
-            StringBuilder builder = new StringBuilder("Print new type name");
-            List<NoteType> types = service.getUserNoteTypes(chatId);
-            if (!types.isEmpty()) {
-                builder.append(" or choose from existing: \n");
-                int i = 1;
-                for (NoteType type : types) {
-                    builder.append(i++).append(". ").append(type.getTypeName()).append("\n");
-                }
-            }
-            ChatUtil.sendMsg(builder.toString(), update, source);
-            SessionUtil.setUserNotesTypes(update, types);
-            SessionUtil.setNextCommand(update, addTypesToNote);
-        });
+        TASK_IMPLS.put(START_ADD_TYPE_TO_NOTE_COMMAND, openTypeChoicePanel);
         TASK_IMPLS.put(SAVE_NEW_TYPE, saveNewType);
         TASK_IMPLS.put(ADD_TYPE_TO_NOTE_COMMAND, (update) -> {
             Long chatId = ChatUtil.getChatId(update);
@@ -88,15 +73,19 @@ public class TaskManager {
 
     private void impl(Command command, Update update) {
         try {
-            command.execute(update);
+            if (command == null) {
+                throw new UnknownErrorException();
+            } else {
+                command.execute(update);
+            }
         } catch (UserFriendlyException e) {
             try {
                 ChatUtil.sendMsg(e.getMessage(), update, source);
             } catch (TelegramApiException ex) {
                 ex.printStackTrace();
             }
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             try {
                 ChatUtil.sendMsg(Messages.ERROR_MESSAGE, update, source);
             } catch (TelegramApiException ex) {

@@ -2,8 +2,8 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
+import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.shared.entity.NoteType;
 import com.http.las.minsides.server.notes.service.NotesService;
 import lombok.AllArgsConstructor;
@@ -15,26 +15,25 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class AddFilters implements Command {
+public class OpenTypeChoicePanel implements Command {
     private NotesService service;
     private MInsidesBot source;
+    private AddTypesToNote addTypesToNote;
 
     @Override
     public void execute(Update update) throws TelegramApiException {
         Long chatId = ChatUtil.getChatId(update);
-        List<NoteType> noteTypes = service.getUserNoteTypes(chatId);
-
-        int i = 1;
-        StringBuilder builder = new StringBuilder();
-        for (NoteType type : noteTypes) {
-            builder.append('/')
-                    .append(i++)
-                    .append(" ")
-                    .append(type.getTypeName())
-                    .append("\n");
+        StringBuilder builder = new StringBuilder("Print new type name");
+        List<NoteType> types = service.getUserNoteTypes(chatId);
+        if (!types.isEmpty()) {
+            builder.append(" or choose from existing: \n");
+            int i = 1;
+            for (NoteType type : types) {
+                builder.append(i++).append(". ").append(type.getTypeName()).append("\n");
+            }
         }
-        ChatUtil.sendMsg("Choose type(s)", update, source);
         ChatUtil.sendMsg(builder.toString(), update, source);
-        SessionUtil.setUserNotesTypes(update, noteTypes);
+        SessionUtil.setUserNotesTypes(update, types);
+        SessionUtil.setNextCommand(update, addTypesToNote);
     }
 }

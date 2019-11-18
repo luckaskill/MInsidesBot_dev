@@ -1,4 +1,4 @@
-package com.http.las.minsides.controller.entity;
+package com.http.las.minsides.controller.entity.uiCommands;
 
 public enum Commands {
     ADD_TYPE_TO_NOTE_COMMAND(NamesConstants.ADD_TYPE_TO_NOTE_COMMAND);

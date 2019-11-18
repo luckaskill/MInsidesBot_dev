@@ -2,8 +2,8 @@ package com.http.las.minsides.server.notes.dao;
 
 import com.http.las.minsides.server.base.BaseDaoImpl;
 import com.http.las.minsides.server.notes.config.HibSessionFactory;
-import com.http.las.minsides.entity.Note;
-import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 import lombok.Cleanup;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;

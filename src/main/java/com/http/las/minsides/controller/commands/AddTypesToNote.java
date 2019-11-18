@@ -6,8 +6,8 @@ import com.http.las.minsides.controller.entity.ButtonKeyboardData;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
-import com.http.las.minsides.entity.Note;
-import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,8 +18,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.http.las.minsides.controller.entity.CommandNames.ADD_TYPE_TO_NOTE_COMMAND;
-import static com.http.las.minsides.controller.entity.CommandNames.SHOW_ADD_NOTE_PANEL_COMMAND;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.ADD_TYPE_TO_NOTE_COMMAND;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.SHOW_ADD_NOTE_PANEL_COMMAND;
 import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCreationNote;
 
 @Component

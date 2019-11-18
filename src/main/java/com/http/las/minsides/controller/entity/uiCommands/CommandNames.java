@@ -1,4 +1,4 @@
-package com.http.las.minsides.controller.entity;
+package com.http.las.minsides.controller.entity.uiCommands;
 
 public interface CommandNames {
     String VIEW_ALL_COMMAND = "view_all";

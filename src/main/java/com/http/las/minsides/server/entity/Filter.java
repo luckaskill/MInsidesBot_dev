@@ -1,7 +1,7 @@
 package com.http.las.minsides.server.entity;
 
-import com.http.las.minsides.entity.DaoEntity;
-import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.shared.entity.DaoEntity;
+import com.http.las.minsides.shared.entity.NoteType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

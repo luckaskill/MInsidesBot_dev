@@ -1,6 +1,6 @@
 package com.http.las.minsides.server.base;
 
-import com.http.las.minsides.entity.DaoEntity;
+import com.http.las.minsides.shared.entity.DaoEntity;
 import com.http.las.minsides.server.notes.config.HibSessionFactory;
 import lombok.Cleanup;
 import org.hibernate.Session;

@@ -1,11 +1,8 @@
-import com.http.las.minsides.entity.Note;
-import com.http.las.minsides.entity.NoteType;
-import com.http.las.minsides.server.notes.config.HibSessionFactory;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 import com.http.las.minsides.server.notes.dao.NoteTypeDao;
 import com.http.las.minsides.server.notes.dao.NotesDao;
 import com.http.las.minsides.server.notes.service.NotesService;
-import lombok.Cleanup;
-import org.hibernate.Session;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

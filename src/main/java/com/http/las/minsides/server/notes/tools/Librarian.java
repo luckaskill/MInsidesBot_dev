@@ -1,7 +1,7 @@
 package com.http.las.minsides.server.notes.tools;
 
-import com.http.las.minsides.entity.Note;
-import com.http.las.minsides.entity.NoteType;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 import com.http.las.minsides.server.entity.Filter;
 
 import java.util.Comparator;

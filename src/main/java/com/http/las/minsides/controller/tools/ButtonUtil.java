@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.http.las.minsides.controller.entity.CommandNames.*;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
 import static com.http.las.minsides.controller.entity.Messages.SAVE;
 import static com.http.las.minsides.controller.entity.Messages.TYPES;
 import static com.http.las.minsides.controller.entity.Messages.*;

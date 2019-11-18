@@ -24,8 +24,6 @@ public class ShowAddNotePanel implements Command {
     public void execute(Update update) throws TelegramApiException {
         InlineKeyboardMarkup markup = ButtonUtil.createAddNotePanel();
 
-        SessionUtil.setNewCreationNote(update);
-
         Long chatId = ChatUtil.getChatId(update);
         SendMessage sendMsg = new SendMessage()
                 .setText(BECOME_CREATING_NOTE_MSG)

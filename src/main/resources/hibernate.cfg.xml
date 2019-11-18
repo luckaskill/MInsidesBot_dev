@@ -14,7 +14,7 @@
         <property name="connection.pool_size">5</property>
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
         <property name="current_session_context_class">thread</property>
-        <mapping class="com.http.las.minsides.entity.Note" />
-        <mapping class="com.http.las.minsides.entity.NoteType" />
+        <mapping class="com.http.las.minsides.shared.entity.Note" />
+        <mapping class="com.http.las.minsides.shared.entity.NoteType" />
     </session-factory>
 </hibernate-configuration>
