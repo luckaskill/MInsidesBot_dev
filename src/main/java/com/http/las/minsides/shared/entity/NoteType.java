@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class NoteType implements DaoEntity {
+public class NoteType extends DaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nid")
@@ -41,4 +41,14 @@ public class NoteType implements DaoEntity {
         this.notes = notes;
         return this;
     }
+
+    @Override
+    public boolean equalsExcludeId(DaoEntity o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NoteType noteType = (NoteType) o;
+        return typeName.equals(noteType.typeName) &&
+                notes.equals(noteType.notes);
+    }
+
 }

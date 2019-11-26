@@ -9,13 +9,14 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Table(name = "paper_office")
 @Entity
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Note implements DaoEntity {
+public class Note extends DaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nid")
@@ -70,6 +71,13 @@ public class Note implements DaoEntity {
 
     @Override
     public String toString() {
+        return "Note{" +
+                "text='" + text + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
+
+    public String toFullString() {
         StringBuilder builder = new StringBuilder();
         String dateStr = date.toString();
         dateStr = dateStr.substring(0, dateStr.length() - 2);
@@ -98,4 +106,17 @@ public class Note implements DaoEntity {
                 .append(dateStr)
                 .append("\n").toString();
     }
+
+    @Override
+    public boolean equalsExcludeId(DaoEntity o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return Objects.equals(text, note.text) &&
+                Objects.equals(title, note.title) &&
+                Objects.equals(date, note.date) &&
+                Objects.equals(chatId, note.chatId);
+
+    }
+
 }
