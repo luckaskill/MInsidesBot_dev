@@ -4,9 +4,11 @@ import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
 import com.http.las.minsides.server.base.BaseDao;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 
+@Transactional
 public interface NotesDao extends BaseDao<Note> {
     List<Note> getAllNotes(Long chatId);
 

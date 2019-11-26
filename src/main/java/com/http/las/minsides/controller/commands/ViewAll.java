@@ -1,6 +1,6 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
 import com.http.las.minsides.controller.entity.Messages;
@@ -31,7 +31,8 @@ public class ViewAll implements Command {
     @Override
     public void execute(Update update) throws TelegramApiException {
         Long chatId = ChatUtil.getChatId(update);
-        List<Note> allNotes = service.getAllNotes(chatId);
+        byte[] key = SessionUtil.getKey(update);
+        List<Note> allNotes = service.getAllNotes(chatId, key);
         StringBuilder builder = new StringBuilder();
         int count = 1;
         for (Note note : allNotes) {

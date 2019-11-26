@@ -1,6 +1,6 @@
 package com.http.las.minsides.controller.storage;
 
-import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
 import lombok.Getter;
@@ -21,9 +21,41 @@ class UserSessionInfo {
     private NoteType typeToSave;
     @Setter
     private Command nextCommand;
+    @Setter
+    private byte[] key;
+    @Setter
+    private long timeOut = 10_800_000L;
+//    private long timeOut = 30000L;
+    private long startTime;
 
-    UserSessionInfo(long chatId) {
+    public UserSessionInfo(long chatId, byte[] key) {
         this.chatId = chatId;
+        this.key = key;
+        refreshTimeout();
     }
 
+    public UserSessionInfo(long chatId) {
+        this.chatId = chatId;
+        refreshTimeout();
+    }
+
+    public boolean timeOuted() {
+        long curTime = System.currentTimeMillis();
+        long timeLeft = curTime - startTime;
+        boolean out = timeLeft >= timeOut;
+        return out;
+    }
+
+    byte[] getKey() {
+        return key;
+    }
+
+    boolean hasKey() {
+        boolean hasKey = key != null;
+        return hasKey;
+    }
+
+    void refreshTimeout() {
+        startTime = System.currentTimeMillis();
+    }
 }

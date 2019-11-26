@@ -2,10 +2,12 @@ package com.http.las.minsides.server.base;
 
 import com.http.las.minsides.shared.entity.DaoEntity;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+@Transactional
 public interface BaseDao <T extends DaoEntity> {
     void save(T value);
 

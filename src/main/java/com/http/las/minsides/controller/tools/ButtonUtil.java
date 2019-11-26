@@ -1,20 +1,21 @@
 package com.http.las.minsides.controller.tools;
 
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
+import com.http.las.minsides.controller.entity.uiCommands.CommandNames;
+import com.http.las.minsides.controller.entity.uiCommands.Commands;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
-import static com.http.las.minsides.controller.entity.Messages.SAVE;
-import static com.http.las.minsides.controller.entity.Messages.TYPES;
 import static com.http.las.minsides.controller.entity.Messages.*;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
 
 public class ButtonUtil {
-    public static InlineKeyboardMarkup configureKeyboard(List<ButtonKeyboardData> dataList) {
+    public static InlineKeyboardMarkup configureKeyboard(Collection<ButtonKeyboardData> dataList) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
 
         List<InlineKeyboardButton> keyboardButtons = new ArrayList<>();
@@ -48,6 +49,14 @@ public class ButtonUtil {
                         new ButtonKeyboardData(SAVE_NOTE_COMMAND, SAVE, false)
                 );
         return configureKeyboard(dataList);
+    }
+
+    public static InlineKeyboardMarkup createYesNoMarkup() {
+        List<ButtonKeyboardData> data = Arrays.asList(
+                new ButtonKeyboardData(YES, YES, false),
+                new ButtonKeyboardData(NO, NO, false)
+        );
+        return configureKeyboard(data);
     }
 
 }

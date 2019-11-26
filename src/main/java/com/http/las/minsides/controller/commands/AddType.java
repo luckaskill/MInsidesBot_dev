@@ -1,6 +1,6 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

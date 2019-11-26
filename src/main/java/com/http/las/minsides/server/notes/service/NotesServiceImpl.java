@@ -1,12 +1,14 @@
 package com.http.las.minsides.server.notes.service;
 
 import com.http.las.minsides.controller.exception.NoteValidatingFailed;
-import com.http.las.minsides.shared.entity.Note;
-import com.http.las.minsides.shared.entity.NoteType;
-//import com.http.las.minsides.server.CryptUtil;
+import com.http.las.minsides.controller.tools.Cryptor;
 import com.http.las.minsides.server.notes.dao.NoteTypeDao;
 import com.http.las.minsides.server.notes.dao.NotesDao;
 import com.http.las.minsides.server.notes.tools.DaoUtil;
+import com.http.las.minsides.shared.Consts;
+import com.http.las.minsides.shared.entity.DaoEntity;
+import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.entity.NoteType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +20,35 @@ import java.util.List;
 public class NotesServiceImpl implements NotesService {
     private NotesDao notesDao;
     private NoteTypeDao noteTypeDao;
-//    private CryptUtil cryptUtil;
 
     @Override
-    public void saveNote(Note note) {
+    public void saveNote(Note note, byte[] bytes) {
         validateNote(note);
+        cryptNote(note, bytes);
         Timestamp curTime = DaoUtil.getCurTime();
-//        cryptUtil.encrypt(note);
         note.setDate(curTime);
         notesDao.persist(note);
+    }
+
+    private void cryptNote(Note note, byte[] key) {
+        String text = note.getText();
+        String encryptText = Cryptor.encrypt(text, key);
+        note.setText(encryptText);
+    }
+
+    private static void decryptNote(List<Note> notes, byte[] key) {
+        for (Note note : notes) {
+            note.createDump();
+            try {
+                String text = note.getText();
+                String decryptText = Cryptor.decrypt(text, key);
+                note.setText(decryptText);
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                System.out.println("Unable to decode note: " + note + " - " + e.getMessage());
+                note.backup();
+                note.setText(Consts.CRYPTED);
+            }
+        }
     }
 
     private void validateNote(Note note) {
@@ -36,9 +58,9 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public List<Note> getAllNotes(Long chatId) {
+    public List<Note> getAllNotes(Long chatId, byte[] bytes) {
         List<Note> allNotes = notesDao.getAllNotes(chatId);
-//        cryptUtil.decrypt(allNotes);
+        decryptNote(allNotes, bytes);
         return allNotes;
     }
 

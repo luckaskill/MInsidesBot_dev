@@ -2,13 +2,19 @@ package com.http.las.minsides.controller.tools;
 
 import com.http.las.minsides.controller.exception.UnknownErrorException;
 import com.http.las.minsides.controller.exception.WrongInputException;
+import lombok.Cleanup;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.validation.constraints.NotNull;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class ChatUtil {
 
@@ -32,6 +38,18 @@ public class ChatUtil {
         return id;
     }
 
+    public static String getInput(Update update) {
+        Message message = update.getMessage();
+        String input = message != null
+                ? (message.hasText() ? message.getText() : null)
+                : null;
+
+        input = input == null
+                ? (update.hasCallbackQuery() ? update.getCallbackQuery().getData() : null)
+                : input;
+        return input;
+    }
+
     public static String getMessageText(Update update) {
         Message message = update.getMessage();
         String text = update.hasMessage()
@@ -40,12 +58,59 @@ public class ChatUtil {
         return text;
     }
 
+    public static Object readUpdate(Update update) {
+        boolean hasMsg = update.hasMessage();
+        Object key = null;
+        if (hasMsg) {
+            Message message = update.getMessage();
+            key = message.hasText() ? message.getText()
+                    : message.hasPhoto() ? message.getPhoto()
+                    : message.hasAudio() ? message.getAudio()
+                    : message.hasAnimation() ? message.getAnimation()
+                    : null;
+            if (key == null) {
+                wrongInput();
+            } else {
+                return key;
+            }
+        } else {
+            wrongInput();
+        }
+        return key;
+    }
+
+    public static byte[] createKeyFromObject(Object o) {
+        byte[] result = null;
+        try (ByteArrayOutputStream arrayOutput = new ByteArrayOutputStream();
+             ObjectOutputStream objectOutput = new ObjectOutputStream(arrayOutput)) {
+            objectOutput.writeObject(o);
+            objectOutput.flush();
+            result = arrayOutput.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            shitHappened();
+        }
+        return result;
+    }
+
     public static void wrongInput() {
         throw new WrongInputException();
     }
 
     public static void shitHappened() {
         throw new UnknownErrorException();
+    }
+
+    public static SendMessage createSendMarkup(String message, Long chatId, InlineKeyboardMarkup markup) {
+        return new SendMessage()
+                .setText(message)
+                .setChatId(chatId)
+                .setReplyMarkup(markup);
+    }
+
+    public static SendMessage createSendMarkup(String message, Update update, InlineKeyboardMarkup markup) {
+        Long chatId = getChatId(update);
+        return createSendMarkup(message, chatId, markup);
     }
 
 }

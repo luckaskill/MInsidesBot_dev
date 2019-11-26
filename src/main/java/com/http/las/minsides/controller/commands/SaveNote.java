@@ -1,6 +1,6 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
@@ -25,7 +25,8 @@ public class SaveNote implements Command {
         Long chatId = ChatUtil.getChatId(update);
         Note note = getOrPutInCreationNote(update);
         note.setChatId(chatId);
-        service.saveNote(note);
+        byte[] key = SessionUtil.getKey(update);
+        service.saveNote(note, key);
         SessionUtil.removeFromCreation(update);
         ChatUtil.sendMsg("Nice, all done.", chatId, source);
         viewAll.execute(update);

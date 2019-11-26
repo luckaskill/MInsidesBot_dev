@@ -3,7 +3,6 @@ package com.http.las.minsides.controller.entity;
 public interface Messages {
     String START_MESSAGE = "Hi there! :)";
     String HI_SHY_GUY = "Hi, sneaky fucking shy guy.";
-    String NOTE = "Note";
     String NOTE_CONTENT = "Note content";
     String TITLE = "Title";
     String PEOPLE = "People";
@@ -16,4 +15,10 @@ public interface Messages {
     String ADD_FILTERS = "Add filters";
     String NOTHING_TO_SHOW = "Here is nothing for now..";
     String PRINT_NOTE_NUMBER = "Print note number to open it.";
+    String PRE_START = "YA. What's ur crypt key?";
+    String ARE_YOU_SURE = "U sure?";
+    String YES = "Yes";
+    String NO = "No";
+    String TRY_AGAIN = "Try again.";
+    String TIMEOUT = "Your session is time outed. Still remember ur key?";
 }

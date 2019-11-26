@@ -1,8 +1,7 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.entity.ButtonKeyboardData;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
@@ -15,11 +14,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.ADD_TYPE_TO_NOTE_COMMAND;
-import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.SHOW_ADD_NOTE_PANEL_COMMAND;
 import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCreationNote;
 
 @Component
@@ -52,16 +48,10 @@ public class AddTypesToNote implements Command {
                 ChatUtil.sendMsg("Not like this... try again", chatId, source);
             }
         } catch (NumberFormatException e) {
-            List<ButtonKeyboardData> data = Arrays.asList(
-                    new ButtonKeyboardData(ADD_TYPE_TO_NOTE_COMMAND, "Yes", false),
-                    new ButtonKeyboardData(SHOW_ADD_NOTE_PANEL_COMMAND, "No", false)
-            );
+            InlineKeyboardMarkup markup = ButtonUtil.createYesNoMarkup();
             SessionUtil.setUserTypeToSave(update, new NoteType().setTypeName(typeName));
-            InlineKeyboardMarkup markup = ButtonUtil.configureKeyboard(data);
-            SendMessage sendMsg = new SendMessage()
-                    .setText("You sure you want to save new type with name " + typeName + " ?")
-                    .setChatId(chatId)
-                    .setReplyMarkup(markup);
+            String message = "You sure you want to save new type with name " + typeName + "?";
+            SendMessage sendMsg = ChatUtil.createSendMarkup(message, chatId, markup);
             source.execute(sendMsg);
         }
     }

@@ -1,11 +1,11 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
+import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import com.http.las.minsides.controller.storage.SessionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,8 +16,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
 import static com.http.las.minsides.controller.entity.Messages.START_MESSAGE;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
 
 @Component
 @AllArgsConstructor

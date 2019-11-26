@@ -1,6 +1,6 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.Command;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
@@ -33,7 +33,7 @@ public class OpenNoteByNumber implements Command {
                 List<Note> notes = SessionUtil.getUserNotes(update);
                 if (notes != null) {
                     Note result = notes.get(number - 1);
-                    sendMsg(result.toString(), chatId, source);
+                    sendMsg(result.toFullString(), chatId, source);
                 } else {
                     ChatUtil.wrongInput();
                 }
