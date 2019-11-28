@@ -18,7 +18,7 @@ public class DaoEntityTest {
     private static long id = 1;
 
     @Test
-    void fullBackupTest() throws NoSuchFieldException, IllegalAccessException {
+    void fullBackupTest() {
         String newData = "new";
         TestNote defaultNote1 = getDefaultNote();
 

@@ -16,6 +16,7 @@ public abstract class DaoEntity {
     }
 
     private boolean setValueFromTo(DaoEntity from, DaoEntity to) {
+        boolean success = false;
         try {
             Class<? extends DaoEntity> toClass = to.getClass();
             Field[] fields = toClass.getDeclaredFields();
@@ -24,16 +25,17 @@ public abstract class DaoEntity {
                 Annotation idAnnotation = field.getAnnotation(Id.class);
                 Annotation ignore = field.getAnnotation(IgnoreDump.class);
                 if (idAnnotation == null && ignore == null) {
-                    setValueFromTo(field, from, to);
+                    setFieldValueFromTo(field, from, to);
                 }
             }
+            success = true;
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        return false;
+        return success;
     }
 
-    private void setValueFromTo(Field field, DaoEntity from, DaoEntity to) throws NoSuchFieldException, IllegalAccessException {
+    private void setFieldValueFromTo(Field field, DaoEntity from, DaoEntity to) throws NoSuchFieldException, IllegalAccessException {
         boolean accessChanged = openAccessIfNeeded(field);
 
         Class<? extends DaoEntity> fromClass = from.getClass();
