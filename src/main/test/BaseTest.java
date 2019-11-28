@@ -3,6 +3,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "/application_context_test.xml")
 @SpringBootTest
-public class ServerTest {
+public class BaseTest {
 
 }

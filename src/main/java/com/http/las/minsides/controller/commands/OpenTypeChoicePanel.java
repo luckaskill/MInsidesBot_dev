@@ -2,7 +2,7 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.entity.uiCommands.Commands;
+import com.http.las.minsides.controller.entity.uiCommands.CommandContainer;
 import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.shared.entity.NoteType;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-@Component(Commands.NamesConstants.START_ADD_TYPE_TO_NOTE_COMMAND)
+@Component(CommandContainer.NamesConstants.START_ADD_TYPE_TO_NOTE_COMMAND)
 @AllArgsConstructor
 public class OpenTypeChoicePanel implements Command {
     private NotesService service;

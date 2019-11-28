@@ -25,8 +25,6 @@ import javax.annotation.PostConstruct;
 public class MInsidesBot extends TelegramLongPollingBot {
     @Autowired
     private TaskManager taskManager;
-    @Autowired
-    private CreateUserSession createUserSession;
 
     static {
         try {

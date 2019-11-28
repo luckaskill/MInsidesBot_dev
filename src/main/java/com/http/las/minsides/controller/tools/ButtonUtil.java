@@ -1,8 +1,6 @@
 package com.http.las.minsides.controller.tools;
 
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
-import com.http.las.minsides.controller.entity.uiCommands.CommandNames;
-import com.http.las.minsides.controller.entity.uiCommands.Commands;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 

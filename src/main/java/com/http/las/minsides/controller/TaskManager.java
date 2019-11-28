@@ -3,7 +3,7 @@ package com.http.las.minsides.controller;
 import com.http.las.minsides.controller.commands.*;
 import com.http.las.minsides.controller.commands.abstractCommands.AskAndWait;
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
-import com.http.las.minsides.controller.entity.uiCommands.Commands;
+import com.http.las.minsides.controller.entity.uiCommands.CommandContainer;
 import com.http.las.minsides.controller.exception.WrongInputException;
 import com.http.las.minsides.controller.storage.SessionUtil;
 import org.springframework.context.ApplicationContext;
@@ -49,12 +49,14 @@ public class TaskManager {
     }
 
     private void autoCommandsLoad(ApplicationContext context) {
-        for (Commands command : Commands.values()) {
+        for (CommandContainer command : CommandContainer.values()) {
             String commandName = command.getCommandName();
             if (context.containsBean(commandName)) {
                 Object commandBean = context.getBean(commandName);
-                if (commandBean instanceof Command) {
+                try {
                     TASK_IMPLS.put(commandName, (Command) commandBean);
+                } catch (ClassCastException e) {
+                    throw new RuntimeException("Command name is used as name of not Command instance.", e);
                 }
             }
         }

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.Timestamp;
 import java.util.List;
 
-class TestClass extends ServerTest {
+class TestClass extends BaseTest {
     @Autowired
     NotesService service;
     @Autowired
