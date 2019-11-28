@@ -4,6 +4,7 @@ import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
 import com.http.las.minsides.controller.entity.Messages;
+import com.http.las.minsides.controller.entity.uiCommands.Commands;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
@@ -21,7 +22,7 @@ import java.util.List;
 
 import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.ADD_FILTERS;
 
-@Component
+@Component(Commands.NamesConstants.VIEW_ALL_COMMAND)
 @AllArgsConstructor
 public class ViewAll implements Command {
     private NotesService service;
@@ -59,7 +60,6 @@ public class ViewAll implements Command {
                     .setChatId(chatId)
                     .setReplyMarkup(markup);
             source.execute(sendMsg);
-
         }
     }
 }

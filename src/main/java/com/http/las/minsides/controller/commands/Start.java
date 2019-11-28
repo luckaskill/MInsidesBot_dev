@@ -3,6 +3,8 @@ package com.http.las.minsides.controller.commands;
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
+import com.http.las.minsides.controller.entity.uiCommands.CommandNames;
+import com.http.las.minsides.controller.entity.uiCommands.Commands;
 import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
@@ -19,7 +21,7 @@ import java.util.List;
 import static com.http.las.minsides.controller.entity.Messages.START_MESSAGE;
 import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
 
-@Component
+@Component(Commands.NamesConstants.START_COMMAND)
 @AllArgsConstructor
 public class Start implements Command {
     private MInsidesBot source;

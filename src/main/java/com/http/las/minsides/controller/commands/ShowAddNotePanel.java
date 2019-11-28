@@ -2,6 +2,7 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
+import com.http.las.minsides.controller.entity.uiCommands.Commands;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import static com.http.las.minsides.controller.entity.Messages.BECOME_CREATING_NOTE_MSG;
 
 
-@Component
+@Component(Commands.NamesConstants.SHOW_ADD_NOTE_PANEL_COMMAND)
 @AllArgsConstructor
 public class ShowAddNotePanel implements Command {
     private MInsidesBot source;

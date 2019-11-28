@@ -24,8 +24,8 @@ public class StartTest {
 
         List<Class> brokenClasses = new ArrayList<>();
         for (Class c : allClasses) {
-            if (!hasNoArgsConstructor(c)) {
-                brokenClasses.add(c);
+                if (!hasNoArgsConstructor(c)) {
+                    brokenClasses.add(c);
             }
         }
         if (!brokenClasses.isEmpty()) {

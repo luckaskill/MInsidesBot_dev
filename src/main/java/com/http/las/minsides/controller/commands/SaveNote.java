@@ -2,6 +2,7 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
+import com.http.las.minsides.controller.entity.uiCommands.Commands;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.shared.entity.Note;
@@ -13,7 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCreationNote;
 
-@Component
+@Component(Commands.NamesConstants.SAVE_NOTE_COMMAND)
 @AllArgsConstructor
 public class SaveNote implements Command {
     private NotesService service;
