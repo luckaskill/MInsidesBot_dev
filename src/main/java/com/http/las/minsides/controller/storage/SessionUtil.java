@@ -21,7 +21,7 @@ import static com.http.las.minsides.controller.entity.Messages.TIMEOUT;
 public class SessionUtil {
     private static final HashMap<Long, UserSessionInfo> SESSIONS = new HashMap<>();
 
-    public static Command getNextCommand(Update update) throws TelegramApiException {
+    public static Command getNextCommand(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
         Command nextCommand = sessionInfo.getNextCommand();
         return nextCommand;
@@ -41,63 +41,69 @@ public class SessionUtil {
         command.execute(update);
     }
 
-    public static void setNextCommand(Update update, Command command) throws TelegramApiException {
+    public static void setNextCommand(Update update, Command command) {
         UserSessionInfo sessionInfo;
         sessionInfo = getSession(update);
         sessionInfo.setNextCommand(command);
     }
 
-    public static void clearNextCommand(Update update) throws TelegramApiException {
+    public static void clearNextCommand(Update update) {
         setNextCommand(update, null);
     }
 
-    public static boolean hasNextCommand(Update update) throws TelegramApiException {
+    public static boolean hasNextCommand(Update update) {
         UserSessionInfo session = getSession(update);
         boolean hasNextCommand = session.getNextCommand() != null;
         return hasNextCommand;
     }
 
-    public static NoteType getNoteTypeToSave(Update update) throws TelegramApiException {
+    public static NoteType getNoteTypeToSave(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
         NoteType typeToSave = sessionInfo.getTypeToSave();
         return typeToSave;
     }
 
-    public static void setUserTypeToSave(Update update, NoteType typeToSave) throws TelegramApiException {
+    public static void setTypeToSave(Update update, NoteType typeToSave) {
         UserSessionInfo sessionInfo = getSession(update);
         sessionInfo.setTypeToSave(typeToSave);
     }
 
-    public static void setUserNotesTypes(Update update, List<NoteType> noteTypes) throws TelegramApiException {
+    public static NoteType getTypeToSave(Update update) {
+        UserSessionInfo sessionInfo = getSession(update);
+        NoteType typeToSave = sessionInfo.getTypeToSave();
+        return typeToSave;
+    }
+
+    public static void setUserNotesTypes(Update update, List<NoteType> noteTypes) {
         UserSessionInfo sessionInfo = getSession(update);
         sessionInfo.setNoteTypes(noteTypes);
     }
 
-    public static List<NoteType> getUserNoteTypes(Update update) throws TelegramApiException {
+    public static List<NoteType> getUserNoteTypes(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
         List<NoteType> noteTypes = sessionInfo.getNoteTypes();
         return noteTypes;
     }
 
-    public static void setUserNotes(Update update, List<Note> notes) throws TelegramApiException {
+    public static void setUserNotes(Update update, List<Note> notes) {
         UserSessionInfo sessionInfo = getSession(update);
         sessionInfo.setNotes(notes);
     }
 
-    public static List<Note> getUserNotes(Update update) throws TelegramApiException {
+    public static List<Note> getUserNotes(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
         List<Note> notes = sessionInfo.getNotes();
         return notes;
     }
 
-    public static Note setNewCreationNote(Update update) throws TelegramApiException {
+    public static Note setNewCreationNote(Update update) {
         UserSessionInfo session = getSession(update);
         Note note = new Note();
         session.setNoteInCreation(note);
         return note;
     }
 
-    public static Note getOrPutInCreationNote(Update update) throws TelegramApiException {
+    public static Note getOrPutInCreationNote(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
 
         Note noteInCreation = sessionInfo.getNoteInCreation();
@@ -110,12 +116,12 @@ public class SessionUtil {
         return noteInCreation;
     }
 
-    public static void removeFromCreation(Update update) throws TelegramApiException {
+    public static void removeFromCreation(Update update) {
         UserSessionInfo sessionInfo = getSession(update);
         sessionInfo.setNoteInCreation(null);
     }
 
-    public static Note getCurrentEditedNote(Update update) throws TelegramApiException {
+    public static Note getCurrentEditedNote(Update update) {
         Note note = getOrPutInCreationNote(update);
         return note;
     }
@@ -131,7 +137,7 @@ public class SessionUtil {
         return session;
     }
 
-    private static UserSessionInfo getSession(Update update) throws TelegramApiException {
+    private static UserSessionInfo getSession(Update update) {
         long chatId = ChatUtil.getChatId(update);
         UserSessionInfo sessionInfo = getOrPutSession(chatId);
         return sessionInfo;
@@ -164,12 +170,12 @@ public class SessionUtil {
         return hasKey;
     }
 
-    public static void setKey(Update update, byte[] key) throws TelegramApiException {
+    public static void setKey(Update update, byte[] key) {
         UserSessionInfo session = getSession(update);
         session.setKey(key);
     }
 
-    public static byte[] getKey(Update update) throws TelegramApiException {
+    public static byte[] getKey(Update update) {
         UserSessionInfo session = getSession(update);
         byte[] key = session.getKey();
         return key;
@@ -202,7 +208,7 @@ public class SessionUtil {
 
     private static void refreshSessionKey(UserSessionInfo session, Update update) throws TelegramApiException {
         Command nextCommand = session.getNextCommand();
-        if (nextCommand != null && nextCommand instanceof CreateSessionCommand) {
+        if (nextCommand instanceof CreateSessionCommand) {
             nextCommand.execute(update);
         } else {
             Command command = ClientBeanService.getBean(CreateUserSession.class);
@@ -213,9 +219,16 @@ public class SessionUtil {
 
     }
 
-    public static void refreshTimeout(Update update) throws TelegramApiException {
+    public static void refreshTimeout(Update update) {
         UserSessionInfo session = getSession(update);
         session.refreshTimeout();
+    }
+
+    public static void addTypeToSaveToCurNote(Update update) {
+        UserSessionInfo session = getSession(update);
+        Note noteInCreation = session.getNoteInCreation();
+        List<NoteType> noteTypes = noteInCreation.getNoteTypes();
+        noteTypes.add(session.getTypeToSave());
     }
 
 }

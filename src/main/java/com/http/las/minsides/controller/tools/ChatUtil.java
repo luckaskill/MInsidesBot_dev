@@ -2,6 +2,7 @@ package com.http.las.minsides.controller.tools;
 
 import com.http.las.minsides.controller.exception.UnknownErrorException;
 import com.http.las.minsides.controller.exception.WrongInputException;
+import com.http.las.minsides.shared.entity.DaoEntity;
 import lombok.Cleanup;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 public class ChatUtil {
 
@@ -111,6 +113,18 @@ public class ChatUtil {
     public static SendMessage createSendMarkup(String message, Update update, InlineKeyboardMarkup markup) {
         Long chatId = getChatId(update);
         return createSendMarkup(message, chatId, markup);
+    }
+
+    private static String getNumberedList(List<String> values) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 1; i <= values.size(); i++) {
+            builder.append('/')
+                    .append(i)
+                    .append(" ")
+                    .append(values)
+                    .append('\n');
+        }
+        return builder.toString();
     }
 
 }

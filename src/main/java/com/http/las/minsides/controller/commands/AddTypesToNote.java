@@ -2,6 +2,7 @@ package com.http.las.minsides.controller.commands;
 
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
+import com.http.las.minsides.controller.entity.Messages;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.storage.SessionUtil;
@@ -23,6 +24,7 @@ import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCre
 public class AddTypesToNote implements Command {
     private ShowAddNotePanel showAddNotePanel;
     private MInsidesBot source;
+    private AddType addType;
 
     @Override
     public void execute(Update update) throws TelegramApiException {
@@ -30,7 +32,7 @@ public class AddTypesToNote implements Command {
         Long chatId = ChatUtil.getChatId(update);
         if (typeName == null) {
             SessionUtil.setNextCommand(update, this);
-            ChatUtil.sendMsg("Not like this... try again", chatId, source);
+            ChatUtil.sendMsg(Messages.NOT_LIKE_THIS, chatId, source);
             return;
         }
         try {
@@ -41,17 +43,18 @@ public class AddTypesToNote implements Command {
                 NoteType type = noteTypes.get(number - 1);
                 List<NoteType> types = note.getNoteTypes();
                 types.add(type);
-                ChatUtil.sendMsg("Nice, now u can continue your creation", chatId, source);
+                ChatUtil.sendMsg(Messages.CREATION_MAY_CONTINUE, chatId, source);
                 showAddNotePanel.execute(update);
             } else {
                 SessionUtil.setNextCommand(update, this);
-                ChatUtil.sendMsg("Not like this... try again", chatId, source);
+                ChatUtil.sendMsg(Messages.NOT_LIKE_THIS, chatId, source);
             }
         } catch (NumberFormatException e) {
             InlineKeyboardMarkup markup = ButtonUtil.createYesNoMarkup();
-            SessionUtil.setUserTypeToSave(update, new NoteType().setTypeName(typeName));
+            SessionUtil.setTypeToSave(update, new NoteType(typeName));
             String message = "You sure you want to save new type with name " + typeName + "?";
             SendMessage sendMsg = ChatUtil.createSendMarkup(message, chatId, markup);
+            SessionUtil.setNextCommand(update, addType);
             source.execute(sendMsg);
         }
     }

@@ -21,4 +21,6 @@ public interface Messages {
     String NO = "No";
     String TRY_AGAIN = "Try again.";
     String TIMEOUT = "Your session is time outed. Still remember ur key?";
+    String NOT_LIKE_THIS = "Not like this... try again";
+    String CREATION_MAY_CONTINUE = "Nice, now u can continue your creation";
 }
