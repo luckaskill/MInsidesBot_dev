@@ -14,8 +14,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-import static com.http.las.minsides.controller.storage.SessionUtil.getOrPutInCreationNote;
-
 @Component(CommandContainer.NamesConstants.ADD_TYPE_TO_NOTE_COMMAND)
 @AllArgsConstructor
 public class AddNoteType implements Command {
