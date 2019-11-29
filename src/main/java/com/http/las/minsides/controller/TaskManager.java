@@ -3,18 +3,17 @@ package com.http.las.minsides.controller;
 import com.http.las.minsides.controller.commands.*;
 import com.http.las.minsides.controller.commands.abstractCommands.AskAndWait;
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
-import com.http.las.minsides.controller.entity.uiCommands.CommandContainer;
+import com.http.las.minsides.controller.entity.Messages;
+import com.http.las.minsides.controller.entity.uiCommands.CommandName;
 import com.http.las.minsides.controller.exception.WrongInputException;
-import com.http.las.minsides.controller.storage.SessionUtil;
+import com.http.las.minsides.controller.storage.SessionUpdate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
 
 @Component
 public class TaskManager {
@@ -23,24 +22,22 @@ public class TaskManager {
     public TaskManager(ApplicationContext context, AddNoteContent addNoteContent, AddTitle addTitle) {
         autoCommandsLoad(context);
 
-        TASK_IMPLS.put(ADD_NOTE_CONTENT_COMMAND, new AskAndWait("Print something from ur mind:", addNoteContent));
-        TASK_IMPLS.put(ADD_TITLE_COMMAND, new AskAndWait("Print something from ur mind:", addTitle));
+        TASK_IMPLS.put(CommandName.ADD_NOTE_CONTENT_COMMAND.getCommandName(), new AskAndWait(Messages.PRINT_SOMETHING_FROM_UR_MIND, addNoteContent));
+        TASK_IMPLS.put(CommandName.ADD_TITLE_COMMAND.getCommandName(), new AskAndWait(Messages.ANY_TITLE, addTitle));
     }
 
-    void impl(String input, Update update) throws TelegramApiException {
+    void impl(String input, SessionUpdate update) throws TelegramApiException {
         Command command = TASK_IMPLS.get(input);
-        command = command == null
-                ? SessionUtil.getNextCommand(update)
-                : command;
 
-        if (SessionUtil.hasNextCommand(update)) {
-            SessionUtil.clearNextCommand(update);
+        if (command == null) {
+            update.implNextCommandIfExist();
+        } else {
+            impl(command, update);
         }
-        impl(command, update);
     }
 
 
-    private void impl(Command command, Update update) throws TelegramApiException {
+    private void impl(Command command, SessionUpdate update) throws TelegramApiException {
         if (command != null) {
             command.execute(update);
         } else {
@@ -49,7 +46,7 @@ public class TaskManager {
     }
 
     private void autoCommandsLoad(ApplicationContext context) {
-        for (CommandContainer command : CommandContainer.values()) {
+        for (CommandName command : CommandName.values()) {
             String commandName = command.getCommandName();
             if (context.containsBean(commandName)) {
                 Object commandBean = context.getBean(commandName);

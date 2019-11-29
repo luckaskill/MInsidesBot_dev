@@ -23,4 +23,6 @@ public interface Messages {
     String TIMEOUT = "Your session is time outed. Still remember ur key?";
     String NOT_LIKE_THIS = "Not like this... try again";
     String CREATION_MAY_CONTINUE = "Nice, now u can continue your creation";
+    String PRINT_SOMETHING_FROM_UR_MIND = "Print something from ur mind:";
+    String ANY_TITLE = "Any title?";
 }

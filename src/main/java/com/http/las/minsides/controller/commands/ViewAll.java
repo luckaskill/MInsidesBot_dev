@@ -1,28 +1,28 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
 import com.http.las.minsides.controller.entity.Messages;
-import com.http.las.minsides.controller.entity.uiCommands.CommandContainer;
+import com.http.las.minsides.controller.entity.uiCommands.CommandName;
+import com.http.las.minsides.controller.storage.SessionUpdate;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import com.http.las.minsides.controller.storage.SessionUtil;
-import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.server.notes.service.NotesService;
+import com.http.las.minsides.shared.entity.Note;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.ADD_FILTERS;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandName.NamesConstants.ADD_FILTERS;
 
-@Component(CommandContainer.NamesConstants.VIEW_ALL_COMMAND)
+
+@Component(CommandName.NamesConstants.VIEW_ALL_COMMAND)
 @AllArgsConstructor
 public class ViewAll implements Command {
     private NotesService service;
@@ -30,9 +30,9 @@ public class ViewAll implements Command {
     private MInsidesBot source;
 
     @Override
-    public void execute(Update update) throws TelegramApiException {
+    public void execute(SessionUpdate update) throws TelegramApiException {
         Long chatId = ChatUtil.getChatId(update);
-        byte[] key = SessionUtil.getKey(update);
+        byte[] key = update.getKey();
         List<Note> allNotes = service.getAllNotes(chatId, key);
         StringBuilder builder = new StringBuilder();
         int count = 1;
@@ -48,8 +48,8 @@ public class ViewAll implements Command {
             String msg = builder.append('\n').toString();
             ChatUtil.sendMsg(msg, update, source);
             ChatUtil.sendMsg(Messages.PRINT_NOTE_NUMBER, update, source);
-            SessionUtil.setUserNotes(update, allNotes);
-            SessionUtil.setNextCommand(update, noteByNumber);
+            update.setUserNotes(allNotes);
+            update.setNextCommand( noteByNumber);
 
             List<ButtonKeyboardData> keyboardData = Collections.singletonList(
                     new ButtonKeyboardData(ADD_FILTERS, Messages.ADD_FILTERS, false));

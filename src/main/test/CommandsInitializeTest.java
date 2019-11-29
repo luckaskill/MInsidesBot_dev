@@ -1,5 +1,5 @@
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
-import com.http.las.minsides.controller.entity.uiCommands.CommandContainer;
+import com.http.las.minsides.controller.entity.uiCommands.CommandName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public class CommandsInitializeTest extends BaseTest {
 
     @Test
     public void commandsInitTest() {
-        CommandContainer[] commandNames = CommandContainer.values();
-        for (CommandContainer command : commandNames) {
+        CommandName[] commandNames = CommandName.values();
+        for (CommandName command : commandNames) {
             String commandName = command.getCommandName();
             if (context.containsBean(commandName)) {
                 Object commandBean = context.getBean(commandName);
@@ -28,8 +28,8 @@ public class CommandsInitializeTest extends BaseTest {
             }
         }
         Collection<Command> commands = TASK_IMPLS.values();
-        List<CommandContainer> autoCommands = Arrays.stream(commandNames)
-                .filter(CommandContainer::isAutoCommand)
+        List<CommandName> autoCommands = Arrays.stream(commandNames)
+                .filter(CommandName::isAutoCommand)
                 .collect(Collectors.toList());
         Assertions.assertEquals(autoCommands.size(), commands.size());
     }

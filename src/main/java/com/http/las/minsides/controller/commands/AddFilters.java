@@ -1,21 +1,19 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.entity.uiCommands.CommandContainer;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
+import com.http.las.minsides.controller.entity.uiCommands.CommandName;
 import com.http.las.minsides.controller.storage.SessionUpdate;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import com.http.las.minsides.controller.storage.SessionUtil;
-import com.http.las.minsides.shared.entity.NoteType;
 import com.http.las.minsides.server.notes.service.NotesService;
+import com.http.las.minsides.shared.entity.NoteType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-@Component(CommandContainer.NamesConstants.ADD_FILTERS)
+@Component(CommandName.NamesConstants.ADD_FILTERS)
 @AllArgsConstructor
 public class AddFilters implements Command {
     private NotesService service;
@@ -37,6 +35,6 @@ public class AddFilters implements Command {
         }
         ChatUtil.sendMsg("Choose type(s)", update, source);
         ChatUtil.sendMsg(builder.toString(), update, source);
-        update.setUserNotesTypes(update, noteTypes);
+        update.setUserNotesTypes(noteTypes);
     }
 }

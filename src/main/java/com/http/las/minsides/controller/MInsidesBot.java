@@ -3,9 +3,7 @@ package com.http.las.minsides.controller;
 import com.http.las.minsides.controller.entity.Messages;
 import com.http.las.minsides.controller.exception.UserFriendlyException;
 import com.http.las.minsides.controller.storage.SessionUpdate;
-import com.http.las.minsides.controller.storage.SessionUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import com.http.las.minsides.shared.exceptions.StartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,18 +18,11 @@ import javax.annotation.PostConstruct;
 
 @Component
 @ComponentScan("com.http.las.minsides")
-//@PropertySource("classpath:application.properties")
 public class MInsidesBot extends TelegramLongPollingBot {
     @Autowired
     private TaskManager taskManager;
 
     static {
-        try {
-            StartAppUtil.preStart();
-        } catch (StartException e) {
-            System.out.println(e.getMessage());
-            System.exit(-1);
-        }
         ApiContextInitializer.init();
     }
 
@@ -50,7 +41,7 @@ public class MInsidesBot extends TelegramLongPollingBot {
     }
 
     private void impl(SessionUpdate update) throws TelegramApiException {
-        boolean sessionOk = update.checkSession(update);
+        boolean sessionOk = update.initSession();
         if (sessionOk) {
             String input = ChatUtil.getInput(update);
             if (input != null) {
@@ -61,7 +52,7 @@ public class MInsidesBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        SessionUpdate sessionUpdate = new SessionUpdate(update);
+        SessionUpdate sessionUpdate = new SessionUpdate(update, this);
         try {
             impl(sessionUpdate);
         } catch (UserFriendlyException e) {

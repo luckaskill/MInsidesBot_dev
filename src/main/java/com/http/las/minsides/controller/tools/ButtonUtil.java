@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.http.las.minsides.controller.entity.Messages.*;
-import static com.http.las.minsides.controller.entity.uiCommands.CommandNames.*;
+import static com.http.las.minsides.controller.entity.uiCommands.CommandName.NamesConstants.*;
 
 public class ButtonUtil {
     public static InlineKeyboardMarkup configureKeyboard(Collection<ButtonKeyboardData> dataList) {

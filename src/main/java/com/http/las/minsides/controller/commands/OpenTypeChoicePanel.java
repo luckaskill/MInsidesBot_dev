@@ -1,20 +1,19 @@
 package com.http.las.minsides.controller.commands;
 
-import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.MInsidesBot;
-import com.http.las.minsides.controller.entity.uiCommands.CommandContainer;
-import com.http.las.minsides.controller.storage.SessionUtil;
+import com.http.las.minsides.controller.commands.abstractCommands.Command;
+import com.http.las.minsides.controller.entity.uiCommands.CommandName;
+import com.http.las.minsides.controller.storage.SessionUpdate;
 import com.http.las.minsides.controller.tools.ChatUtil;
-import com.http.las.minsides.shared.entity.NoteType;
 import com.http.las.minsides.server.notes.service.NotesService;
+import com.http.las.minsides.shared.entity.NoteType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-@Component(CommandContainer.NamesConstants.START_ADD_TYPE_TO_NOTE_COMMAND)
+@Component(CommandName.NamesConstants.START_ADD_TYPE_TO_NOTE_COMMAND)
 @AllArgsConstructor
 public class OpenTypeChoicePanel implements Command {
     private NotesService service;
@@ -22,7 +21,7 @@ public class OpenTypeChoicePanel implements Command {
     private AddTypesToNote addTypesToNote;
 
     @Override
-    public void execute(Update update) throws TelegramApiException {
+    public void execute(SessionUpdate update) throws TelegramApiException {
         Long chatId = ChatUtil.getChatId(update);
         StringBuilder builder = new StringBuilder("Print new type name");
         List<NoteType> types = service.getUserNoteTypes(chatId);
@@ -34,7 +33,7 @@ public class OpenTypeChoicePanel implements Command {
             }
         }
         ChatUtil.sendMsg(builder.toString(), update, source);
-        SessionUtil.setUserNotesTypes(update, types);
-        SessionUtil.setNextCommand(update, addTypesToNote);
+        update.setUserNotesTypes(types);
+        update.setNextCommand(addTypesToNote);
     }
 }
