@@ -12,7 +12,8 @@ public enum CommandName {
     SHOW_ADD_NOTE_PANEL_COMMAND(NamesConstants.SHOW_ADD_NOTE_PANEL_COMMAND),
     START_ADD_TYPE_TO_NOTE_COMMAND(NamesConstants.START_ADD_TYPE_TO_NOTE_COMMAND),
     SAVE_NEW_TYPE(NamesConstants.SAVE_NEW_TYPE),
-    ADD_FILTERS(NamesConstants.ADD_FILTERS);
+    ADD_FILTERS(NamesConstants.ADD_FILTERS),
+    ;
 
     public static class NamesConstants {
         public static final String ADD_TYPE_TO_NOTE_COMMAND = "add_type_to_note";

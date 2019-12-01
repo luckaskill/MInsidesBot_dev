@@ -3,6 +3,7 @@ package com.http.las.minsides.controller.commands;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.entity.ButtonKeyboardData;
+import com.http.las.minsides.controller.entity.Messages;
 import com.http.las.minsides.controller.entity.uiCommands.CommandName;
 import com.http.las.minsides.controller.storage.SessionUpdate;
 import com.http.las.minsides.controller.tools.ButtonUtil;
@@ -30,13 +31,12 @@ public class Start implements Command {
         update.setNextCommand(null);
         List<ButtonKeyboardData> dataList =
                 Arrays.asList(
-                        new ButtonKeyboardData(VIEW_ALL_COMMAND, "View all notes", true),
-                        new ButtonKeyboardData(SHOW_ADD_NOTE_PANEL_COMMAND, "Add new note", false)
-//                        new ButtonKeyboardData("don'tTouchMe", "Add other staff", false)
+                        new ButtonKeyboardData(VIEW_ALL_COMMAND, Messages.VIEW_ALL_NOTES, true),
+                        new ButtonKeyboardData(SHOW_ADD_NOTE_PANEL_COMMAND, Messages.ADD_NEW_NOTE, false)
                 );
         InlineKeyboardMarkup markup = ButtonUtil.configureKeyboard(dataList);
 
-        Long chatId = ChatUtil.getChatId(update);
+        Long chatId = update.getChatId();
         SendMessage sendMsg = new SendMessage()
                 .setText(START_MESSAGE)
                 .setChatId(chatId)

@@ -90,7 +90,7 @@ public class Note extends DaoEntity {
                 .append("\n")
                 .append(dateStr);
         if (!CollectionUtils.isEmpty(noteTypes)) {
-            builder.append("Types:\n\n");
+            builder.append("\nTypes:\n\n");
             for (NoteType type : noteTypes) {
                 builder.append("   ").append(type.getTypeName()).append('\n');
             }
@@ -98,6 +98,7 @@ public class Note extends DaoEntity {
         return builder.toString();
     }
 
+    //use in reflection
     public String toShortString() {
         StringBuilder builder = new StringBuilder();
         String dateStr = date.toString();

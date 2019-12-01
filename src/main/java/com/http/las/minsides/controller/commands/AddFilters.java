@@ -21,7 +21,7 @@ public class AddFilters implements Command {
 
     @Override
     public void execute(SessionUpdate update) throws TelegramApiException {
-        Long chatId = ChatUtil.getChatId(update);
+        Long chatId = update.getChatId();
         List<NoteType> noteTypes = service.getUserNoteTypes(chatId);
 
         int i = 1;

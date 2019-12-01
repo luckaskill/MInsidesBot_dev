@@ -24,7 +24,7 @@ public class OpenTypeChoicePanel implements Command {
 
     @Override
     public void execute(SessionUpdate update) throws TelegramApiException {
-        Long chatId = ChatUtil.getChatId(update);
+        Long chatId = update.getChatId();
         StringBuilder builder = new StringBuilder("Print new type name ");
         List<NoteType> types = service.getUserNoteTypes(chatId);
         if (!types.isEmpty()) {

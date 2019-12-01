@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static com.http.las.minsides.controller.entity.Messages.BECOME_CREATING_NOTE_MSG;
+import static com.http.las.minsides.controller.entity.Messages.ADD_NOTE_PANEL_MAIN_MSG;
 
 
 @Component(CommandName.NamesConstants.SHOW_ADD_NOTE_PANEL_COMMAND)
@@ -24,9 +24,9 @@ public class ShowAddNotePanel implements Command {
     public void execute(SessionUpdate update) throws TelegramApiException {
         InlineKeyboardMarkup markup = ButtonUtil.createAddNotePanel();
 
-        Long chatId = ChatUtil.getChatId(update);
+        Long chatId = update.getChatId();
         SendMessage sendMsg = new SendMessage()
-                .setText(BECOME_CREATING_NOTE_MSG)
+                .setText(ADD_NOTE_PANEL_MAIN_MSG)
                 .setChatId(chatId)
                 .setReplyMarkup(markup);
         source.execute(sendMsg);

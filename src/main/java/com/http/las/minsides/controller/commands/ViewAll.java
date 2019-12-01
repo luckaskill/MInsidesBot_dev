@@ -33,7 +33,7 @@ public class ViewAll implements Command {
 
     @Override
     public void execute(SessionUpdate update) throws TelegramApiException {
-        Long chatId = ChatUtil.getChatId(update);
+        Long chatId = update.getChatId();
         byte[] key = update.getKey();
         List<Note> allNotes = service.getAllNotes(chatId, key);
         StringBuilder builder = new StringBuilder();

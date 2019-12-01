@@ -8,6 +8,7 @@ import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.tools.ClientBeanService;
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
+import lombok.Getter;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -26,6 +27,7 @@ import static com.http.las.minsides.controller.entity.Messages.TIMEOUT;
 
 public class SessionUpdate extends Update {
     private Update update;
+    @Getter
     private Long chatId;
     private UserSessionInfo session;
     private TelegramLongPollingBot source;

@@ -10,20 +10,24 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
 @AllArgsConstructor
-public class AddType implements Command {
-    private ShowAddNotePanel showAddNotePanel;
+public class AddNewType implements Command {
+    private ShowTypeChoicePanelWithBackBtn showTypeChoicePanel;
 
     @Override
     public void execute(SessionUpdate update) throws TelegramApiException {
         String input = ChatUtil.getInput(update);
         if (input.equals(Messages.YES)) {
             update.addTypeToSaveToCurNote();
-            showAddNotePanel.execute(update);
         } else if (input.equals(Messages.NO)) {
-            showAddNotePanel.execute(update);
+            showTypeChoicePanel.setMessage(Messages.ALRIGHT_THEN);
         } else {
-            update.setNextCommand(this);
             ChatUtil.wrongInput();
         }
+        showTypeChoicePanel.execute(update);
+    }
+
+    @Override
+    public boolean isRepeatable() {
+        return true;
     }
 }

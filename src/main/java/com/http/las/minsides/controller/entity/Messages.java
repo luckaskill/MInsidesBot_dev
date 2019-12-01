@@ -8,7 +8,7 @@ public interface Messages {
     String PEOPLE = "People";
     String TYPES = "Types";
     String SAVE = "Save";
-    String BECOME_CREATING_NOTE_MSG = "From what you want to become?";
+    String ADD_NOTE_PANEL_MAIN_MSG = "...here we go again";
     String ALRIGHT_THEN = "Alright, then..";
     String ERROR_MESSAGE = "Here is a problem... please contact me. \n @luckaskill";
     String WRONG_INPUT = "Wrong input, bro";
@@ -25,4 +25,9 @@ public interface Messages {
     String CREATION_MAY_CONTINUE = "Nice, now u can continue your creation";
     String PRINT_SOMETHING_FROM_UR_MIND = "Print something from ur mind:";
     String ANY_TITLE = "Any title?";
+    String BACK = "Back";
+    String ADD_NEW_NOTE = "Add new note";
+    String VIEW_ALL_NOTES = "View all notes";
+    String ADDED = "Added";
+    String MORE_TYPES_OR = "ADD more types or...?";
 }

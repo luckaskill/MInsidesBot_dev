@@ -20,7 +20,7 @@ public class SaveNote implements Command {
 
     @Override
     public void execute(SessionUpdate update) throws TelegramApiException {
-        Long chatId = ChatUtil.getChatId(update);
+        Long chatId = update.getChatId();
         Note note = update.getOrPutInCreationNote();
         note.setChatId(chatId);
         byte[] key = update.getKey();
