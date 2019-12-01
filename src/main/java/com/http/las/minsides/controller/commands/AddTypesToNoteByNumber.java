@@ -3,11 +3,13 @@ package com.http.las.minsides.controller.commands;
 import com.http.las.minsides.controller.MInsidesBot;
 import com.http.las.minsides.controller.commands.abstractCommands.Command;
 import com.http.las.minsides.controller.entity.Messages;
+import com.http.las.minsides.controller.exception.WrongInputException;
 import com.http.las.minsides.controller.storage.SessionUpdate;
 import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
+import com.http.las.minsides.shared.util.EntityUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,35 +20,24 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class AddTypesToNote implements Command {
+public class AddTypesToNoteByNumber implements Command {
     private ShowAddNotePanel showAddNotePanel;
     private MInsidesBot source;
     private AddType addType;
 
     @Override
     public void execute(SessionUpdate update) throws TelegramApiException {
-        String typeName = ChatUtil.getMessageText(update);
+        String typeName = ChatUtil.getNotNullMessageText(update);
         Long chatId = ChatUtil.getChatId(update);
-        if (typeName == null) {
-            update.setNextCommand(this);
-            ChatUtil.sendMsg(Messages.NOT_LIKE_THIS, chatId, source);
-            return;
-        }
+
         try {
-            int number = Integer.parseInt(typeName);
-            List<NoteType> noteTypes = update.getUserNoteTypes();
-            if (noteTypes != null && noteTypes.size() >= number && number > 0) {
-                Note note = update.getOrPutInCreationNote();
-                NoteType type = noteTypes.get(number - 1);
-                List<NoteType> types = note.getNoteTypes();
-                types.add(type);
-                ChatUtil.sendMsg(Messages.CREATION_MAY_CONTINUE, chatId, source);
-                showAddNotePanel.execute(update);
-            } else {
-                update.setNextCommand(this);
-                ChatUtil.sendMsg(Messages.NOT_LIKE_THIS, chatId, source);
-            }
-        } catch (NumberFormatException e) {
+            List<NoteType> userNoteTypes = update.getUserNoteTypes();
+            NoteType type = ChatUtil.getByCommandNumber(userNoteTypes, typeName);
+            update.addTypeToNote(type);
+
+            ChatUtil.sendMsg(Messages.CREATION_MAY_CONTINUE, chatId, source);
+            showAddNotePanel.execute(update);
+        } catch (WrongInputException e) {
             InlineKeyboardMarkup markup = ButtonUtil.createYesNoMarkup();
             update.setTypeToSave(new NoteType(typeName));
             String message = "You sure you want to save new type with name " + typeName + "?";
@@ -54,5 +45,10 @@ public class AddTypesToNote implements Command {
             update.setNextCommand(addType);
             source.execute(sendMsg);
         }
+    }
+
+    @Override
+    public boolean isRepeatable() {
+        return true;
     }
 }

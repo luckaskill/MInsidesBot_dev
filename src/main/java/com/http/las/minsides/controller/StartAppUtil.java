@@ -14,6 +14,7 @@ class StartAppUtil {
     private void startTests() throws StartException {
         System.out.println("Test entities...");
         StartTest.test();
+        System.out.println("Entities are ok.\n");
         System.out.println("Update db...");
         System.out.println("\nStarted;)");
     }

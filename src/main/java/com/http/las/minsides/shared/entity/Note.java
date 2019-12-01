@@ -17,6 +17,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Note extends DaoEntity {
+    public static final String TO_SHORT_STRING_METHOD = "toShortString";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nid")

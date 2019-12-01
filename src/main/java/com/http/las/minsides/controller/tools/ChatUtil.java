@@ -60,6 +60,14 @@ public class ChatUtil {
         return text;
     }
 
+    public static String getNotNullMessageText(Update update) {
+        String text = getMessageText(update);
+        if (text == null) {
+            wrongInput();
+        }
+        return text;
+    }
+
     public static Object readUpdate(Update update) {
         boolean hasMsg = update.hasMessage();
         Object key = null;
@@ -115,16 +123,46 @@ public class ChatUtil {
         return createSendMarkup(message, chatId, markup);
     }
 
-    private static String getNumberedList(List<String> values) {
+    public static String buildSlashedNumList(List<String> values) {
         StringBuilder builder = new StringBuilder();
         for (int i = 1; i <= values.size(); i++) {
             builder.append('/')
                     .append(i)
                     .append(" ")
-                    .append(values)
+                    .append(values.get(i - 1))
                     .append('\n');
         }
         return builder.toString();
+    }
+
+    public static <T> T getByCommandNumber(List<T> list, String commandNumber) {
+        T result = null;
+        try {
+            if (!commandNumber.isEmpty()) {
+                int number = defineInt(commandNumber);
+                if (number > 0 && !list.isEmpty() && list.size() >= number) {
+                    result = list.get(number - 1);
+                } else {
+                    ChatUtil.wrongInput();
+                }
+            } else {
+                ChatUtil.wrongInput();
+            }
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            ChatUtil.wrongInput();
+        }
+        return result;
+    }
+
+
+    private static Integer defineInt(String command) {
+        int number;
+        if (command.charAt(0) == '/') {
+            number = Integer.parseInt(command.substring(1));
+        } else {
+            number = Integer.parseInt(command);
+        }
+        return number;
     }
 
 }

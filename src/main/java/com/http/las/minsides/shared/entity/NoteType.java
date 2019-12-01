@@ -16,6 +16,8 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public class NoteType extends DaoEntity {
+    public static final String TYPE_NAME_FIELDNAME = "typeName";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nid")

@@ -47,8 +47,14 @@ public class SessionUpdate extends Update {
 
     public void implNextCommand() throws TelegramApiException {
         Command command = session.getNextCommand();
+        //first clean, then execute!!!
+        cleanIfNotRepeatable();
         command.execute(this);
-        if (!command.isRepeatable()) {
+    }
+
+    private void cleanIfNotRepeatable() {
+        Command nextCommand = session.getNextCommand();
+        if (!nextCommand.isRepeatable()) {
             session.setNextCommand(null);
         }
     }
@@ -163,6 +169,12 @@ public class SessionUpdate extends Update {
         Note noteInCreation = getOrPutInCreationNote();
         List<NoteType> noteTypes = noteInCreation.getNoteTypes();
         noteTypes.add(session.getTypeToSave());
+    }
+
+    public void addTypeToNote(NoteType type) {
+        Note noteInCreation = getOrPutInCreationNote();
+        List<NoteType> noteTypes = noteInCreation.getNoteTypes();
+        noteTypes.add(type);
     }
 
     @Override

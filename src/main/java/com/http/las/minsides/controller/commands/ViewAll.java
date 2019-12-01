@@ -10,12 +10,14 @@ import com.http.las.minsides.controller.tools.ButtonUtil;
 import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.server.notes.service.NotesService;
 import com.http.las.minsides.shared.entity.Note;
+import com.http.las.minsides.shared.util.EntityUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,11 +37,12 @@ public class ViewAll implements Command {
         byte[] key = update.getKey();
         List<Note> allNotes = service.getAllNotes(chatId, key);
         StringBuilder builder = new StringBuilder();
-        int count = 1;
-        for (Note note : allNotes) {
-            builder.append("/")
-                    .append(count++)
-                    .append(note.toShortString());
+        try {
+            List<String> shortNotes = EntityUtil.readEntityValues(Note.TO_SHORT_STRING_METHOD, allNotes);
+            String numberedList = ChatUtil.buildSlashedNumList(shortNotes);
+            builder.append(numberedList);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new TelegramApiException(e);
         }
 
         if (builder.length() == 0) {
@@ -49,7 +52,7 @@ public class ViewAll implements Command {
             ChatUtil.sendMsg(msg, update, source);
             ChatUtil.sendMsg(Messages.PRINT_NOTE_NUMBER, update, source);
             update.setUserNotes(allNotes);
-            update.setNextCommand( noteByNumber);
+            update.setNextCommand(noteByNumber);
 
             List<ButtonKeyboardData> keyboardData = Collections.singletonList(
                     new ButtonKeyboardData(ADD_FILTERS, Messages.ADD_FILTERS, false));

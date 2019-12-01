@@ -52,7 +52,9 @@ public class NotesServiceImpl implements NotesService {
     }
 
     private void validateNote(Note note) {
-        if (note.getTitle() == null || note.getText() == null) {
+        boolean emptyTitle = note.getTitle() == null;
+        boolean emptyText = note.getText() == null;
+        if (emptyTitle || emptyText) {
             throw new NoteValidatingFailed("Print at least title and main text ;)");
         }
     }
