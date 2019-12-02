@@ -26,6 +26,9 @@ public class NoteType extends DaoEntity {
     @Column(name = "type_name")
     private String typeName;
 
+    @Column(name = "chat_id")
+    private Integer chatId;
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "noteTypes")
     @EqualsAndHashCode.Exclude
     private List<Note> notes = new ArrayList<>();

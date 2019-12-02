@@ -27,9 +27,7 @@ class NotesDaoImpl extends BaseDaoImpl<Note> implements NotesDao {
         @Cleanup
         Session session = HibSessionFactory.open();
         List<NoteType> noteTypes = session.createQuery(
-                "SELECT DISTINCT nt FROM NoteType as nt " +
-                        "INNER JOIN nt.notes as notes " +
-                        "ON notes.chatId = " + chatId, NoteType.class).list();
+                "select distinct t FROM NoteType t where t.chatId=" + chatId, NoteType.class).list();
         return noteTypes;
     }
 
