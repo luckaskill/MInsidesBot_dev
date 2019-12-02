@@ -1,8 +1,8 @@
 package com.http.las.minsides.server.base;
 
 import com.http.las.minsides.shared.entity.DaoEntity;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;

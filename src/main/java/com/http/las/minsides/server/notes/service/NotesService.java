@@ -2,8 +2,8 @@ package com.http.las.minsides.server.notes.service;
 
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional

@@ -1,0 +1,1 @@
+ALTER TABLE types ADD COLUMN chat_id INTEGER;
