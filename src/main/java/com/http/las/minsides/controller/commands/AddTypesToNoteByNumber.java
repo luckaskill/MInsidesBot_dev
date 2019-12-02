@@ -35,7 +35,7 @@ public class AddTypesToNoteByNumber implements Command {
             showTypeChoicePanel.execute(update);
         } catch (WrongInputException e) {
             InlineKeyboardMarkup markup = ButtonUtil.createYesNoMarkup();
-            update.setTypeToSave(new NoteType(typeName));
+            update.setTypeToSave(new NoteType(typeName, chatId));
             String message = "You sure you want to save new type with name " + typeName + "?";
             SendMessage sendMsg = ChatUtil.createSendMarkup(message, chatId, markup);
             update.setNextCommand(addType);

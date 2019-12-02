@@ -1,9 +1,6 @@
 package com.http.las.minsides.shared.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,7 +24,7 @@ public class NoteType extends DaoEntity {
     private String typeName;
 
     @Column(name = "chat_id")
-    private Integer chatId;
+    private Long chatId;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "noteTypes")
     @EqualsAndHashCode.Exclude
@@ -37,8 +34,18 @@ public class NoteType extends DaoEntity {
         this.typeName = typeName;
     }
 
+    public NoteType(String typeName, Long chatId) {
+        this.typeName = typeName;
+        this.chatId = chatId;
+    }
+
     public NoteType setTypeName(String typeName) {
         this.typeName = typeName;
+        return this;
+    }
+
+    public NoteType setChatId(Long chatId) {
+        this.chatId = chatId;
         return this;
     }
 
