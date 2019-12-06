@@ -1,12 +1,11 @@
 package com.http.las.minsides.server.notes.service;
 
 import com.http.las.minsides.controller.exception.NoteValidatingFailed;
-import com.http.las.minsides.controller.tools.Cryptor;
+import com.http.las.minsides.server.tools.Cryptor;
 import com.http.las.minsides.server.notes.dao.NoteTypeDao;
 import com.http.las.minsides.server.notes.dao.NotesDao;
 import com.http.las.minsides.server.notes.tools.DaoUtil;
 import com.http.las.minsides.shared.Consts;
-import com.http.las.minsides.shared.entity.DaoEntity;
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.http.las.minsides.controller.tools;
+package com.http.las.minsides.server.tools;
 
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
