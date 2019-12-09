@@ -2,8 +2,9 @@ package com.http.las.minsides.server.notes.service;
 
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
-import org.springframework.transaction.annotation.Transactional;
+import com.http.las.minsides.shared.entity.Person;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
@@ -15,4 +16,9 @@ public interface NotesService {
     List<NoteType> getUserNoteTypes(Long chatId);
 
     void saveNewNoteType(NoteType type);
+
+    List<Person> getUserPeople(Long chatId);
+
+    void saveNewPerson(Person person);
+
 }

@@ -4,7 +4,6 @@ public enum CommandName {
     ADD_TYPE_TO_NOTE_COMMAND(NamesConstants.ADD_TYPE_TO_NOTE_COMMAND),
     VIEW_ALL_COMMAND(NamesConstants.VIEW_ALL_COMMAND),
     ADD_NOTE_CONTENT_COMMAND(NamesConstants.ADD_NOTE_CONTENT_COMMAND, false),
-    ADD_PEOPLE_TO_NOTE_COMMAND(NamesConstants.ADD_PEOPLE_TO_NOTE_COMMAND, false),
     ADD_TITLE_COMMAND(NamesConstants.ADD_TITLE_COMMAND, false),
     SAVE_NOTE_COMMAND(NamesConstants.SAVE_NOTE_COMMAND),
     START_COMMAND(NamesConstants.START_COMMAND),
@@ -13,13 +12,14 @@ public enum CommandName {
     START_ADD_TYPE_TO_NOTE_COMMAND(NamesConstants.START_ADD_TYPE_TO_NOTE_COMMAND),
     SAVE_NEW_TYPE(NamesConstants.SAVE_NEW_TYPE),
     ADD_FILTERS(NamesConstants.ADD_FILTERS),
+    ADD_PEOPLE_TO_NOTE_COMMAND(NamesConstants.ADD_PEOPLE_TO_NOTE_COMMAND),
+    OPEN_PEOPLE_CHOICE_PANEL_COMMAND(NamesConstants.OPEN_PEOPLE_CHOICE_PANEL_COMMAND),
     ;
 
     public static class NamesConstants {
         public static final String ADD_TYPE_TO_NOTE_COMMAND = "add_type_to_note";
         public static final String VIEW_ALL_COMMAND = "/view";
         public static final String ADD_NOTE_CONTENT_COMMAND = "add_note_content";
-        public static final String ADD_PEOPLE_TO_NOTE_COMMAND = "add_people_content";
         public static final String ADD_TITLE_COMMAND = "add_note_title";
         public static final String SAVE_NOTE_COMMAND = "save_note";
         public static final String START_COMMAND = "/start";
@@ -28,6 +28,8 @@ public enum CommandName {
         public static final String START_ADD_TYPE_TO_NOTE_COMMAND = "start_add_type_to_note";
         public static final String SAVE_NEW_TYPE = "save_new_type";
         public static final String ADD_FILTERS = "add_filters";
+        public static final String ADD_PEOPLE_TO_NOTE_COMMAND = "add_people_content";
+        public static final String OPEN_PEOPLE_CHOICE_PANEL_COMMAND = "open_people_choice_panel";
     }
 
     private final String commandName;

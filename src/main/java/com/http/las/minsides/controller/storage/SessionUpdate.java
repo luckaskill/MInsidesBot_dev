@@ -8,6 +8,7 @@ import com.http.las.minsides.controller.tools.ChatUtil;
 import com.http.las.minsides.controller.tools.ClientBeanService;
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
+import com.http.las.minsides.shared.entity.Person;
 import lombok.Getter;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -75,6 +76,15 @@ public class SessionUpdate extends Update {
         return notes;
     }
 
+    public List<Person> getUserPeople() {
+        List<Person> userPeople = session.getUserPeople();
+        return userPeople;
+    }
+
+    public void setUserPeople(List<Person> userPeople) {
+        session.setUserPeople(userPeople);
+    }
+
     public boolean hasNextCommand() {
         boolean hasNextCommand = session.getNextCommand() != null;
         return hasNextCommand;
@@ -87,7 +97,6 @@ public class SessionUpdate extends Update {
     public void refreshTimeout() {
         session.refreshTimeout();
     }
-
 
     public void setUserNotesTypes(List<NoteType> types) {
         session.setNoteTypes(types);
@@ -110,6 +119,15 @@ public class SessionUpdate extends Update {
     public NoteType getNoteTypeToSave() {
         NoteType typeToSave = session.getTypeToSave();
         return typeToSave;
+    }
+
+    public void setPersonToSave(Person personToSave) {
+        session.setPersonToSave(personToSave);
+    }
+
+    public Person getPersonToSave() {
+        Person personToSave = session.getPersonToSave();
+        return personToSave;
     }
 
     public void setTypeToSave(NoteType typeToSave) {
@@ -173,10 +191,25 @@ public class SessionUpdate extends Update {
         noteTypes.add(session.getTypeToSave());
     }
 
+    public void addPersonToSaveToCurNote() {
+        Note noteInCreation = getOrPutInCreationNote();
+        List<Person> notePeople = noteInCreation.getNotePeople();
+        notePeople.add(session.getPersonToSave());
+    }
+
     public void addTypeToNote(NoteType type) {
         Note noteInCreation = getOrPutInCreationNote();
         List<NoteType> noteTypes = noteInCreation.getNoteTypes();
         noteTypes.add(type);
+    }
+
+    public void addPersonToNote(Person person) {
+        Note noteInCreation = getOrPutInCreationNote();
+        List<Person> notePeople = noteInCreation.getNotePeople();
+
+        if (!notePeople.contains(person)) {
+            notePeople.add(person);
+        }
     }
 
     @Override

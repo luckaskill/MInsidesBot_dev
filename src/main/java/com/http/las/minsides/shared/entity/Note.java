@@ -38,6 +38,14 @@ public class Note extends DaoEntity {
     )
     @EqualsAndHashCode.Exclude
     private List<NoteType> noteTypes = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "people_mentions",
+            joinColumns = {@JoinColumn(name = "note_id", referencedColumnName = "nid")},
+            inverseJoinColumns = {@JoinColumn(name = "person_id", referencedColumnName = "nid")}
+    )
+    @EqualsAndHashCode.Exclude
+    private List<Person> notePeople = new ArrayList<>();
 
     public Note(String text, String title, Timestamp date, Long chatId) {
         this.text = text;
@@ -71,6 +79,11 @@ public class Note extends DaoEntity {
         return this;
     }
 
+    public Note setNotePeople(List<Person> notePeople) {
+        this.notePeople = notePeople;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Note{" +
@@ -93,6 +106,12 @@ public class Note extends DaoEntity {
             builder.append("\nTypes:\n\n");
             for (NoteType type : noteTypes) {
                 builder.append("   ").append(type.getTypeName()).append('\n');
+            }
+        }
+        if (!CollectionUtils.isEmpty(notePeople)) {
+            builder.append("\nPeople:\n\n");
+            for (Person person : notePeople) {
+                builder.append("   ").append(person.getName()).append('\n');
             }
         }
         return builder.toString();

@@ -29,5 +29,7 @@ public interface Messages {
     String ADD_NEW_NOTE = "Add new note";
     String VIEW_ALL_NOTES = "View all notes";
     String ADDED = "Added";
+    String SAVED = "Saved";
+    String CANCELED = "Canceled";
     String MORE_TYPES_OR = "ADD more types or...?";
 }

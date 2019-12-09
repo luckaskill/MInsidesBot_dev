@@ -42,7 +42,7 @@ public class ButtonUtil {
                 Arrays.asList(
                         new ButtonKeyboardData(ADD_NOTE_CONTENT_COMMAND, NOTE_CONTENT, true),
                         new ButtonKeyboardData(ADD_TITLE_COMMAND, TITLE, false),
-                        new ButtonKeyboardData(ADD_PEOPLE_TO_NOTE_COMMAND, PEOPLE, false),
+                        new ButtonKeyboardData(OPEN_PEOPLE_CHOICE_PANEL_COMMAND, PEOPLE, false),
                         new ButtonKeyboardData(START_ADD_TYPE_TO_NOTE_COMMAND, TYPES, true),
                         new ButtonKeyboardData(SAVE_NOTE_COMMAND, SAVE, false)
                 );

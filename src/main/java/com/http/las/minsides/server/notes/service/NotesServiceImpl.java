@@ -1,6 +1,7 @@
 package com.http.las.minsides.server.notes.service;
 
 import com.http.las.minsides.controller.exception.NoteValidatingFailed;
+import com.http.las.minsides.server.notes.dao.PersonDao;
 import com.http.las.minsides.server.tools.Cryptor;
 import com.http.las.minsides.server.notes.dao.NoteTypeDao;
 import com.http.las.minsides.server.notes.dao.NotesDao;
@@ -8,6 +9,7 @@ import com.http.las.minsides.server.notes.tools.DaoUtil;
 import com.http.las.minsides.shared.Consts;
 import com.http.las.minsides.shared.entity.Note;
 import com.http.las.minsides.shared.entity.NoteType;
+import com.http.las.minsides.shared.entity.Person;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class NotesServiceImpl implements NotesService {
     private NotesDao notesDao;
     private NoteTypeDao noteTypeDao;
+    private PersonDao personDao;
 
     @Override
     public void saveNote(Note note, byte[] bytes) {
@@ -74,6 +77,17 @@ public class NotesServiceImpl implements NotesService {
     @Override
     public void saveNewNoteType(NoteType type) {
         noteTypeDao.save(type);
+    }
+
+    @Override
+    public List<Person> getUserPeople(Long chatId) {
+        List<Person> userPeople = personDao.getUserPeople(chatId);
+        return userPeople;
+    }
+
+    @Override
+    public void saveNewPerson(Person person) {
+        personDao.save(person);
     }
 
 }
