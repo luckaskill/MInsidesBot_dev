@@ -1,4 +1,4 @@
-import com.http.las.minsides.server.tools.Cryptor;
+import com.las.bots.minsides.server.server.tools.Cryptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

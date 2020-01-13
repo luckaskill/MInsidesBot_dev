@@ -1,5 +1,5 @@
-import com.http.las.minsides.shared.util.EntityUtil;
-import com.http.las.minsides.shared.util.ReflectionUtil;
+import com.las.bots.minsides.shared.shared.util.EntityUtil;
+import com.las.bots.minsides.shared.shared.util.ReflectionUtil;
 import entity.TestNote;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

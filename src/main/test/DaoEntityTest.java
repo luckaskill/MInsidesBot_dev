@@ -1,4 +1,4 @@
-import com.http.las.minsides.shared.entity.NoteType;
+import com.las.bots.minsides.shared.shared.entity.NoteType;
 import entity.TestNote;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

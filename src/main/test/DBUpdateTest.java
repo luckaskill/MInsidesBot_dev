@@ -1,4 +1,4 @@
-import com.http.las.minsides.server.notes.config.HibSessionFactory;
+import com.las.bots.minsides.server.server.notes.config.HibSessionFactory;
 import lombok.Cleanup;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;

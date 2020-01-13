@@ -1,10 +1,10 @@
-import com.http.las.minsides.server.notes.dao.PersonDao;
-import com.http.las.minsides.shared.entity.Note;
-import com.http.las.minsides.shared.entity.NoteType;
-import com.http.las.minsides.server.notes.dao.NoteTypeDao;
-import com.http.las.minsides.server.notes.dao.NotesDao;
-import com.http.las.minsides.server.notes.service.NotesService;
-import com.http.las.minsides.shared.entity.Person;
+import com.las.bots.minsides.server.server.notes.dao.PersonDao;
+import com.las.bots.minsides.shared.shared.entity.Note;
+import com.las.bots.minsides.shared.shared.entity.NoteType;
+import com.las.bots.minsides.server.server.notes.dao.NoteTypeDao;
+import com.las.bots.minsides.server.server.notes.dao.NotesDao;
+import com.las.bots.minsides.server.server.notes.service.NotesService;
+import com.las.bots.minsides.shared.shared.entity.Person;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

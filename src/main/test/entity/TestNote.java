@@ -1,8 +1,8 @@
 package entity;
 
-import com.http.las.minsides.shared.entity.DaoEntity;
-import com.http.las.minsides.shared.entity.IgnoreDump;
-import com.http.las.minsides.shared.entity.NoteType;
+import com.las.bots.minsides.shared.shared.entity.DaoEntity;
+import com.las.bots.minsides.shared.shared.entity.IgnoreDump;
+import com.las.bots.minsides.shared.shared.entity.NoteType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

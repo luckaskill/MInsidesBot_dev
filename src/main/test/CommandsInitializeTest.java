@@ -1,5 +1,5 @@
-import com.http.las.minsides.controller.commands.abstractCommands.Command;
-import com.http.las.minsides.controller.entity.uiCommands.CommandName;
+import com.las.bots.minsides.controller.commands.abstractCommands.Command;
+import com.las.bots.minsides.controller.entity.uiCommands.CommandName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
